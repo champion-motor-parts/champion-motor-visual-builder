@@ -41,7 +41,7 @@ function ImageTile({ active, image, label, accent, onClick }: ImageTileProps) {
           : "border-white/10 bg-black/30 hover:border-white/25 hover:bg-white/5"
       }`}
     >
-      <span className="relative block aspect-square overflow-hidden rounded-md bg-zinc-950">
+      <span className="relative block aspect-square overflow-hidden rounded-md bg-stone-100">
         <img src={image} alt={label} className="h-full w-full object-contain p-2" />
         <span
           className="absolute bottom-1.5 right-1.5 h-3 w-3 rounded-full border border-white/50"
@@ -71,7 +71,7 @@ function BodyTile({ active, image, label, onClick }: BodyTileProps) {
           : "border-white/10 bg-black/30 hover:border-white/25 hover:bg-white/5"
       }`}
     >
-      <span className="block aspect-[4/3] overflow-hidden rounded-md bg-zinc-950">
+      <span className="block aspect-[4/3] overflow-hidden rounded-md bg-stone-100">
         <img src={image} alt={label} className="h-full w-full object-contain p-1.5" />
       </span>
       <span className="min-w-0 truncate text-sm font-black text-white">{label}</span>
@@ -162,13 +162,13 @@ export function Lcv8RimMatch() {
               </div>
             </div>
 
-            <div className="bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08),transparent_48%),#080807] p-2 sm:p-4">
-              <div className="aspect-[16/10] overflow-hidden rounded-lg border border-white/10 bg-zinc-950">
+            <div className="bg-[linear-gradient(180deg,rgba(250,250,247,0.96),rgba(226,218,203,0.96))] p-2 sm:p-4">
+              <div className="aspect-[4/3] overflow-hidden rounded-lg border border-black/10 bg-stone-100 shadow-inner sm:aspect-[16/10]">
                 <img
                   key={previewImage}
                   src={previewImage}
                   alt={selectedAsset?.id ?? `${bodyShellId}__${rimColorId}`}
-                  className="h-full w-full object-contain"
+                  className="h-full w-full object-contain drop-shadow-[0_18px_28px_rgba(0,0,0,0.22)]"
                 />
               </div>
             </div>
