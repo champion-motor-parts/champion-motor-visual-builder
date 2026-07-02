@@ -7,12 +7,9 @@ import {
   BodyShellId,
   RimColorId,
   bodyShells,
-  frontTyreSize,
-  getPreviewImage,
-  rearTyreSize,
+  getPreviewAsset,
   rimColors,
-  y15zrModelName,
-} from "@/data/lcv8-rim-match";
+} from "@/data/lcv8-preview-assets";
 import { WHATSAPP_PHONE_NUMBER } from "@/lib/config";
 
 const badges = ["Stock Body", "LCV8 5-Spoke", "Front + Rear", "Direct Fit"];
@@ -23,14 +20,6 @@ function findBodyShell(id: BodyShellId) {
 
 function findRimColor(id: RimColorId) {
   return rimColors.find((rimColor) => rimColor.id === id) ?? rimColors[0];
-}
-
-function bodyLabel(id: BodyShellId) {
-  return findBodyShell(id).shortName;
-}
-
-function rimLabel(id: RimColorId) {
-  return findRimColor(id).shortName;
 }
 
 type ImageTileProps = {
@@ -64,65 +53,59 @@ function ImageTile({ active, image, label, accent, onClick }: ImageTileProps) {
   );
 }
 
-type SelectorButtonProps = {
+type BodyTileProps = {
   active: boolean;
-  label: string;
   image: string;
-  accent: string;
+  label: string;
   onClick: () => void;
 };
 
-function SelectorButton({ active, label, image, accent, onClick }: SelectorButtonProps) {
+function BodyTile({ active, image, label, onClick }: BodyTileProps) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`grid grid-cols-[64px_minmax(0,1fr)_auto] items-center gap-3 rounded-lg border p-2 text-left text-sm font-bold transition ${
+      className={`grid grid-cols-[76px_minmax(0,1fr)] items-center gap-3 rounded-lg border p-2 text-left transition ${
         active
-          ? "border-[var(--accent)] bg-white/10 text-white"
-          : "border-white/10 bg-black/30 text-stone-300 hover:border-white/25 hover:bg-white/5"
+          ? "border-[var(--accent)] bg-white/10"
+          : "border-white/10 bg-black/30 hover:border-white/25 hover:bg-white/5"
       }`}
     >
       <span className="block aspect-[4/3] overflow-hidden rounded-md bg-zinc-950">
-        <img src={image} alt={label} className="h-full w-full object-contain p-1" />
+        <img src={image} alt={label} className="h-full w-full object-contain p-1.5" />
       </span>
-      <span className="min-w-0 truncate">{label}</span>
-      <span
-        className="h-3 w-3 shrink-0 rounded-full border border-white/50"
-        style={{ backgroundColor: accent }}
-      />
+      <span className="min-w-0 truncate text-sm font-black text-white">{label}</span>
     </button>
   );
 }
 
 export function Lcv8RimMatch() {
   const [bodyShellId, setBodyShellId] = useState<BodyShellId>("cyan_orange");
-  const [rimColorId, setRimColorId] = useState<RimColorId>("magenta");
+  const [rimColorId, setRimColorId] = useState<RimColorId>("blue");
 
-  const selectedBody = findBodyShell(bodyShellId);
+  const selectedBodyShell = findBodyShell(bodyShellId);
   const selectedRim = findRimColor(rimColorId);
-  const previewImage = getPreviewImage(bodyShellId, rimColorId);
+  const selectedAsset = getPreviewAsset(bodyShellId, rimColorId) ?? getPreviewAsset("cyan_orange", "blue");
+  const previewImage = selectedAsset?.previewImage ?? "/visual-builder/lcv8/previews/cyan_orange__blue.png";
 
   const themeStyle = {
-    "--accent": selectedRim.accent,
-    "--body-accent": selectedBody.accent,
+    "--accent": selectedRim.hex,
   } as CSSProperties;
 
   const whatsappText = useMemo(
     () =>
       [
-        "Hi Champion Motor, saya berminat dengan Y15ZR LCV8 Rim Match ini:",
+        "Hi Champion Motor, saya berminat setup ini:",
         "",
-        `Model: ${y15zrModelName}`,
-        `Body: ${selectedBody.shortName}`,
-        `Rim Color: ${selectedRim.shortName}`,
-        `Rim Design: LCV8 5-Spoke Front + Rear`,
-        `Tyre Size: Front ${frontTyreSize}, Rear ${rearTyreSize}`,
-        "Estimated Price: RM XXX.XX",
+        "Model: Yamaha Y15ZR",
+        `Body Shell: ${selectedBodyShell.label}`,
+        `Rim: LCV8 ${selectedRim.label}`,
+        "Rim Design: 5-spoke",
+        "Tyre Size: Front 70/90-17, Rear 80/90-17",
         "",
-        "Boleh check stock dan installation slot?",
+        "Boleh confirm harga, stock dan slot pemasangan?",
       ].join("\n"),
-    [selectedBody.shortName, selectedRim.shortName],
+    [selectedBodyShell.label, selectedRim.label],
   );
 
   const whatsappUrl = `https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${encodeURIComponent(
@@ -164,7 +147,7 @@ export function Lcv8RimMatch() {
                   Selected Preview
                 </p>
                 <h2 className="mt-1 text-lg font-black text-white">
-                  {bodyLabel(bodyShellId)} + {rimLabel(rimColorId)}
+                  {selectedBodyShell.label} + {selectedRim.label}
                 </h2>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -180,13 +163,11 @@ export function Lcv8RimMatch() {
             </div>
 
             <div className="bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08),transparent_48%),#080807] p-2 sm:p-4">
-              <div className="relative aspect-[16/10] overflow-hidden rounded-lg border border-white/10 bg-zinc-950">
+              <div className="aspect-[16/10] overflow-hidden rounded-lg border border-white/10 bg-zinc-950">
                 <img
                   key={previewImage}
                   src={previewImage}
-                  alt={`${y15zrModelName} ${bodyLabel(bodyShellId)} with ${rimLabel(
-                    rimColorId,
-                  )} LCV8 5-spoke rims`}
+                  alt={selectedAsset?.id ?? `${bodyShellId}__${rimColorId}`}
                   className="h-full w-full object-contain"
                 />
               </div>
@@ -201,12 +182,11 @@ export function Lcv8RimMatch() {
               </div>
               <div className="grid gap-2">
                 {bodyShells.map((bodyShell) => (
-                  <SelectorButton
+                  <BodyTile
                     key={bodyShell.id}
                     active={bodyShell.id === bodyShellId}
-                    label={bodyShell.shortName}
-                    image={bodyShell.image}
-                    accent={bodyShell.accent}
+                    image={bodyShell.thumbnail}
+                    label={bodyShell.label}
                     onClick={() => setBodyShellId(bodyShell.id)}
                   />
                 ))}
@@ -225,9 +205,9 @@ export function Lcv8RimMatch() {
                   <ImageTile
                     key={rimColor.id}
                     active={rimColor.id === rimColorId}
-                    image={rimColor.image}
-                    label={rimColor.shortName}
-                    accent={rimColor.accent}
+                    image={rimColor.thumbnail}
+                    label={rimColor.label}
+                    accent={rimColor.hex}
                     onClick={() => setRimColorId(rimColor.id)}
                   />
                 ))}
@@ -238,21 +218,23 @@ export function Lcv8RimMatch() {
               <dl className="space-y-3 text-sm">
                 <div className="flex justify-between gap-4 border-b border-white/10 pb-3">
                   <dt className="text-stone-400">Model</dt>
-                  <dd className="text-right font-bold text-white">{y15zrModelName}</dd>
+                  <dd className="text-right font-bold text-white">Yamaha Y15ZR</dd>
                 </div>
                 <div className="flex justify-between gap-4 border-b border-white/10 pb-3">
-                  <dt className="text-stone-400">Body</dt>
-                  <dd className="text-right font-bold text-white">{selectedBody.shortName}</dd>
+                  <dt className="text-stone-400">Body Shell</dt>
+                  <dd className="text-right font-bold text-white">{selectedBodyShell.label}</dd>
                 </div>
                 <div className="flex justify-between gap-4 border-b border-white/10 pb-3">
-                  <dt className="text-stone-400">Rim Color</dt>
-                  <dd className="text-right font-bold text-white">{selectedRim.shortName}</dd>
+                  <dt className="text-stone-400">Rim</dt>
+                  <dd className="text-right font-bold text-white">LCV8 {selectedRim.label}</dd>
+                </div>
+                <div className="flex justify-between gap-4 border-b border-white/10 pb-3">
+                  <dt className="text-stone-400">Rim Design</dt>
+                  <dd className="text-right font-bold text-white">5-spoke</dd>
                 </div>
                 <div className="flex justify-between gap-4 border-b border-white/10 pb-3">
                   <dt className="text-stone-400">Tyre Size</dt>
-                  <dd className="text-right font-bold text-white">
-                    F {frontTyreSize} / R {rearTyreSize}
-                  </dd>
+                  <dd className="text-right font-bold text-white">F 70/90-17 / R 80/90-17</dd>
                 </div>
                 <div className="flex justify-between gap-4">
                   <dt className="text-stone-400">Estimated Price</dt>
@@ -274,7 +256,7 @@ export function Lcv8RimMatch() {
         </div>
 
         <p className="rounded-lg border border-white/10 bg-black/30 px-4 py-3 text-center text-xs font-bold uppercase tracking-[0.14em] text-stone-400">
-          Visual Preview Only • Final result depends on actual product and installation
+          Visual Preview Only - Final result depends on actual product and installation
         </p>
       </section>
     </main>
