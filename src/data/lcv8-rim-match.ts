@@ -39,21 +39,21 @@ export const bodyShells: BodyShell[] = [
     id: "cyan_orange",
     name: "Cyan Orange Stock Body",
     shortName: "Cyan Orange",
-    image: `${assetRoot}/bodies/body-cyan-orange.png`,
+    image: `${assetRoot}/bodies/body-cyan_orange.png`,
     accent: "#22d3ee",
   },
   {
     id: "white_red",
     name: "White Red Stock Body",
     shortName: "White Red",
-    image: `${assetRoot}/bodies/body-white-red.png`,
+    image: `${assetRoot}/bodies/body-white_red.png`,
     accent: "#ef4444",
   },
   {
     id: "dark_orange",
     name: "Dark Orange Stock Body",
     shortName: "Dark Orange",
-    image: `${assetRoot}/bodies/body-dark-orange.png`,
+    image: `${assetRoot}/bodies/body-dark_orange.png`,
     accent: "#f97316",
   },
 ];
@@ -84,7 +84,7 @@ export const rimColors: RimColor[] = [
     id: "orange_gold",
     name: "LCV8 Orange Gold 5-Spoke",
     shortName: "Orange Gold",
-    image: `${assetRoot}/rims/rim-orange-gold.png`,
+    image: `${assetRoot}/rims/rim-orange_gold.png`,
     accent: "#f59e0b",
   },
 ];

@@ -1,7 +1,6 @@
 "use client";
 
 import { MessageCircle, ShieldCheck, Sparkles, Wrench } from "lucide-react";
-import Image from "next/image";
 import type { CSSProperties } from "react";
 import { useMemo, useState } from "react";
 import {
@@ -54,7 +53,7 @@ function ImageTile({ active, image, label, accent, onClick }: ImageTileProps) {
       }`}
     >
       <span className="relative block aspect-square overflow-hidden rounded-md bg-zinc-950">
-        <Image src={image} alt={label} fill sizes="112px" className="object-contain p-2" />
+        <img src={image} alt={label} className="h-full w-full object-contain p-2" />
         <span
           className="absolute bottom-1.5 right-1.5 h-3 w-3 rounded-full border border-white/50"
           style={{ backgroundColor: accent }}
@@ -68,22 +67,26 @@ function ImageTile({ active, image, label, accent, onClick }: ImageTileProps) {
 type SelectorButtonProps = {
   active: boolean;
   label: string;
+  image: string;
   accent: string;
   onClick: () => void;
 };
 
-function SelectorButton({ active, label, accent, onClick }: SelectorButtonProps) {
+function SelectorButton({ active, label, image, accent, onClick }: SelectorButtonProps) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`flex min-h-12 items-center justify-between gap-3 rounded-lg border px-3 py-2 text-left text-sm font-bold transition ${
+      className={`grid grid-cols-[64px_minmax(0,1fr)_auto] items-center gap-3 rounded-lg border p-2 text-left text-sm font-bold transition ${
         active
           ? "border-[var(--accent)] bg-white/10 text-white"
           : "border-white/10 bg-black/30 text-stone-300 hover:border-white/25 hover:bg-white/5"
       }`}
     >
-      <span>{label}</span>
+      <span className="block aspect-[4/3] overflow-hidden rounded-md bg-zinc-950">
+        <img src={image} alt={label} className="h-full w-full object-contain p-1" />
+      </span>
+      <span className="min-w-0 truncate">{label}</span>
       <span
         className="h-3 w-3 shrink-0 rounded-full border border-white/50"
         style={{ backgroundColor: accent }}
@@ -178,14 +181,13 @@ export function Lcv8RimMatch() {
 
             <div className="bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08),transparent_48%),#080807] p-2 sm:p-4">
               <div className="relative aspect-[16/10] overflow-hidden rounded-lg border border-white/10 bg-zinc-950">
-                <Image
+                <img
+                  key={previewImage}
                   src={previewImage}
                   alt={`${y15zrModelName} ${bodyLabel(bodyShellId)} with ${rimLabel(
                     rimColorId,
                   )} LCV8 5-spoke rims`}
-                  fill
-                  sizes="(min-width: 1024px) 65vw, 100vw"
-                  className="object-contain"
+                  className="h-full w-full object-contain"
                 />
               </div>
             </div>
@@ -203,6 +205,7 @@ export function Lcv8RimMatch() {
                     key={bodyShell.id}
                     active={bodyShell.id === bodyShellId}
                     label={bodyShell.shortName}
+                    image={bodyShell.image}
                     accent={bodyShell.accent}
                     onClick={() => setBodyShellId(bodyShell.id)}
                   />
