@@ -1,7 +1,12 @@
-export type BodyShellId = "cyan_orange" | "white_red" | "dark_orange";
+export type BodyShellId = "grey_gold" | "cyan_orange" | "white_red" | "dark_orange";
 export type RimColorId = "magenta" | "blue" | "red" | "orange_gold";
 
 export const bodyShells = [
+  {
+    id: "grey_gold",
+    label: "Grey Gold",
+    thumbnail: "/visual-builder/lcv8/bodies/body-grey_gold.png",
+  },
   {
     id: "cyan_orange",
     label: "Cyan Orange",
@@ -51,6 +56,54 @@ export const rimColors = [
 ] as const;
 
 export const lcv8PreviewAssets = [
+  {
+    id: "grey_gold__magenta",
+    bodyShellId: "grey_gold",
+    rimColorId: "magenta",
+    model: "Yamaha Y15ZR",
+    rimModel: "LCV8",
+    wheelDesign: "5-spoke",
+    previewImage: "/visual-builder/lcv8/previews/grey_gold__magenta.png",
+    rimLayerImage: "/visual-builder/lcv8/rim_layers/rim-layer-magenta.png",
+    frontTyre: "70/90-17",
+    rearTyre: "80/90-17",
+  },
+  {
+    id: "grey_gold__blue",
+    bodyShellId: "grey_gold",
+    rimColorId: "blue",
+    model: "Yamaha Y15ZR",
+    rimModel: "LCV8",
+    wheelDesign: "5-spoke",
+    previewImage: "/visual-builder/lcv8/previews/grey_gold__blue.png",
+    rimLayerImage: "/visual-builder/lcv8/rim_layers/rim-layer-blue.png",
+    frontTyre: "70/90-17",
+    rearTyre: "80/90-17",
+  },
+  {
+    id: "grey_gold__red",
+    bodyShellId: "grey_gold",
+    rimColorId: "red",
+    model: "Yamaha Y15ZR",
+    rimModel: "LCV8",
+    wheelDesign: "5-spoke",
+    previewImage: "/visual-builder/lcv8/previews/grey_gold__red.png",
+    rimLayerImage: "/visual-builder/lcv8/rim_layers/rim-layer-red.png",
+    frontTyre: "70/90-17",
+    rearTyre: "80/90-17",
+  },
+  {
+    id: "grey_gold__orange_gold",
+    bodyShellId: "grey_gold",
+    rimColorId: "orange_gold",
+    model: "Yamaha Y15ZR",
+    rimModel: "LCV8",
+    wheelDesign: "5-spoke",
+    previewImage: "/visual-builder/lcv8/previews/grey_gold__orange_gold.png",
+    rimLayerImage: "/visual-builder/lcv8/rim_layers/rim-layer-orange_gold.png",
+    frontTyre: "70/90-17",
+    rearTyre: "80/90-17",
+  },
   {
     id: "cyan_orange__magenta",
     bodyShellId: "cyan_orange",

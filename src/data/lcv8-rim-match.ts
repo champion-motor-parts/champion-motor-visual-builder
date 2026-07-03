@@ -37,21 +37,21 @@ export const rearTyreSize = "80/90-17";
 export const bodyShells: BodyShell[] = [
   {
     id: "cyan_orange",
-    name: "Cyan Orange Stock Body",
+    name: "Cyan Orange Cover Set",
     shortName: "Cyan Orange",
     image: `${assetRoot}/bodies/body-cyan_orange.png`,
     accent: "#22d3ee",
   },
   {
     id: "white_red",
-    name: "White Red Stock Body",
+    name: "White Red Cover Set",
     shortName: "White Red",
     image: `${assetRoot}/bodies/body-white_red.png`,
     accent: "#ef4444",
   },
   {
     id: "dark_orange",
-    name: "Dark Orange Stock Body",
+    name: "Dark Orange Cover Set",
     shortName: "Dark Orange",
     image: `${assetRoot}/bodies/body-dark_orange.png`,
     accent: "#f97316",

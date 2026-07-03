@@ -12,7 +12,7 @@ import {
 } from "@/data/lcv8-preview-assets";
 import { WHATSAPP_PHONE_NUMBER } from "@/lib/config";
 
-const badges = ["Stock Body", "LCV8 5-Spoke", "Front + Rear", "Direct Fit"];
+const badges = ["Cover Set", "LCV8 5-Spoke", "Front + Rear", "Direct Fit"];
 
 function findBodyShell(id: BodyShellId) {
   return bodyShells.find((bodyShell) => bodyShell.id === id) ?? bodyShells[0];
@@ -80,13 +80,13 @@ function BodyTile({ active, image, label, onClick }: BodyTileProps) {
 }
 
 export function Lcv8RimMatch() {
-  const [bodyShellId, setBodyShellId] = useState<BodyShellId>("cyan_orange");
+  const [bodyShellId, setBodyShellId] = useState<BodyShellId>("grey_gold");
   const [rimColorId, setRimColorId] = useState<RimColorId>("blue");
 
   const selectedBodyShell = findBodyShell(bodyShellId);
   const selectedRim = findRimColor(rimColorId);
-  const selectedAsset = getPreviewAsset(bodyShellId, rimColorId) ?? getPreviewAsset("cyan_orange", "blue");
-  const previewImage = selectedAsset?.previewImage ?? "/visual-builder/lcv8/previews/cyan_orange__blue.png";
+  const selectedAsset = getPreviewAsset(bodyShellId, rimColorId) ?? getPreviewAsset("grey_gold", "blue");
+  const previewImage = selectedAsset?.previewImage ?? "/visual-builder/lcv8/previews/grey_gold__blue.png";
 
   const themeStyle = {
     "--accent": selectedRim.hex,
@@ -98,7 +98,7 @@ export function Lcv8RimMatch() {
         "Hi Champion Motor, saya berminat setup ini:",
         "",
         "Model: Yamaha Y15ZR",
-        `Body Shell: ${selectedBodyShell.label}`,
+        `Cover Set: ${selectedBodyShell.label}`,
         `Rim: LCV8 ${selectedRim.label}`,
         "Rim Design: 5-spoke",
         "Tyre Size: Front 70/90-17, Rear 80/90-17",
@@ -127,7 +127,7 @@ export function Lcv8RimMatch() {
               Y15ZR LCV8 Rim Match
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-7 text-stone-300 sm:text-lg">
-              Match stock body shell options with LCV8 5-spoke front and rear rim colors.
+              Match cover set options with LCV8 5-spoke front and rear rim colors.
             </p>
           </div>
 
@@ -178,7 +178,7 @@ export function Lcv8RimMatch() {
             <section className="rounded-lg border border-white/10 bg-zinc-950/70 p-4 shadow-showroom">
               <div className="mb-3 flex items-center gap-2">
                 <Wrench size={18} className="text-[var(--accent)]" aria-hidden="true" />
-                <h2 className="text-sm font-black uppercase tracking-[0.16em]">Stock Body</h2>
+                <h2 className="text-sm font-black uppercase tracking-[0.16em]">Cover Set</h2>
               </div>
               <div className="grid gap-2">
                 {bodyShells.map((bodyShell) => (
@@ -221,7 +221,7 @@ export function Lcv8RimMatch() {
                   <dd className="text-right font-bold text-white">Yamaha Y15ZR</dd>
                 </div>
                 <div className="flex justify-between gap-4 border-b border-white/10 pb-3">
-                  <dt className="text-stone-400">Body Shell</dt>
+                  <dt className="text-stone-400">Cover Set</dt>
                   <dd className="text-right font-bold text-white">{selectedBodyShell.label}</dd>
                 </div>
                 <div className="flex justify-between gap-4 border-b border-white/10 pb-3">
