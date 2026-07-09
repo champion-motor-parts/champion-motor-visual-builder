@@ -1,6 +1,16 @@
 export type MotorModelId = "y16zr";
-export type RimModelId = "lcv8_5spoke";
-export type CoverSetId = "cyan_black" | "red_black_white" | "white_red" | "green_black";
+export type RimModelId =
+  | "lcv8_5spoke"
+  | "six_spoke_sport"
+  | "y_spoke_racing"
+  | "ten_spoke_track"
+  | "split_spoke_forged";
+export type CoverSetId =
+  | "cyan_black"
+  | "red_black_white"
+  | "white_red"
+  | "green_black"
+  | "blue_silver";
 export type RimColorId = "magenta" | "blue" | "red" | "orange_gold";
 
 export type ShowroomPreviewAsset = {
@@ -28,6 +38,26 @@ export const rimModels = [
     label: "LCV8 5-Spoke",
     shortLabel: "LCV8",
   },
+  {
+    id: "six_spoke_sport",
+    label: "6-Spoke Sport",
+    shortLabel: "6-Spoke",
+  },
+  {
+    id: "y_spoke_racing",
+    label: "Y-Spoke Racing",
+    shortLabel: "Y-Spoke",
+  },
+  {
+    id: "ten_spoke_track",
+    label: "10-Spoke Track",
+    shortLabel: "10-Spoke",
+  },
+  {
+    id: "split_spoke_forged",
+    label: "Split-Spoke Forged",
+    shortLabel: "Split",
+  },
 ] as const;
 
 export const coverSets = [
@@ -54,6 +84,12 @@ export const coverSets = [
     label: "Green Black",
     shortLabel: "Green",
     accent: "#6f8f5f",
+  },
+  {
+    id: "blue_silver",
+    label: "Blue Silver",
+    shortLabel: "Blue",
+    accent: "#7897ad",
   },
 ] as const;
 
@@ -240,7 +276,13 @@ export function getAvailableRimColors(
         asset.motorModelId === motorModelId &&
         asset.coverSetId === coverSetId &&
         asset.rimModelId === rimModelId &&
-        asset.rimColorId === rimColor.id,
+      asset.rimColorId === rimColor.id,
     ),
+  );
+}
+
+export function getPreviewAssetsForSetup(motorModelId: MotorModelId, rimModelId: RimModelId) {
+  return showroomPreviewAssets.filter(
+    (asset) => asset.motorModelId === motorModelId && asset.rimModelId === rimModelId,
   );
 }
