@@ -1,4 +1,4 @@
-export type MotorModelId = "y16zr";
+export type MotorModelId = "y16zr" | "y15zr";
 export type RimModelId =
   | "lcv8_5spoke"
   | "six_spoke_sport"
@@ -10,7 +10,10 @@ export type CoverSetId =
   | "red_black_white"
   | "white_red"
   | "green_black"
-  | "blue_silver";
+  | "blue_silver"
+  | "grey_gold"
+  | "cyan_orange"
+  | "dark_orange";
 export type RimColorId = "magenta" | "blue" | "red" | "orange_gold";
 
 export type ShowroomPreviewAsset = {
@@ -23,12 +26,18 @@ export type ShowroomPreviewAsset = {
 };
 
 const y16Lcv8Root = "/visual-builder/showroom/y16zr/lcv8-5spoke";
+const y15Lcv8Root = "/visual-builder/lcv8/previews";
 
 export const motorModels = [
   {
     id: "y16zr",
     label: "Yamaha Y16ZR",
     shortLabel: "Y16ZR",
+  },
+  {
+    id: "y15zr",
+    label: "Yamaha Y15ZR V1-V2",
+    shortLabel: "Y15ZR",
   },
 ] as const;
 
@@ -37,26 +46,31 @@ export const rimModels = [
     id: "lcv8_5spoke",
     label: "LCV8 5-Spoke",
     shortLabel: "LCV8",
+    motorModelIds: ["y16zr", "y15zr"],
   },
   {
     id: "six_spoke_sport",
     label: "6-Spoke Sport",
     shortLabel: "6-Spoke",
+    motorModelIds: ["y16zr"],
   },
   {
     id: "y_spoke_racing",
     label: "Y-Spoke Racing",
     shortLabel: "Y-Spoke",
+    motorModelIds: ["y16zr"],
   },
   {
     id: "ten_spoke_track",
     label: "10-Spoke Track",
     shortLabel: "10-Spoke",
+    motorModelIds: ["y16zr"],
   },
   {
     id: "split_spoke_forged",
     label: "Split-Spoke Forged",
     shortLabel: "Split",
+    motorModelIds: ["y16zr"],
   },
 ] as const;
 
@@ -66,30 +80,56 @@ export const coverSets = [
     label: "Cyan Black",
     shortLabel: "Cyan",
     accent: "#16c8e8",
+    motorModelIds: ["y16zr"],
   },
   {
     id: "red_black_white",
     label: "Red Black White",
     shortLabel: "Red",
     accent: "#e11d2e",
+    motorModelIds: ["y16zr"],
   },
   {
     id: "white_red",
     label: "White Red",
     shortLabel: "White",
     accent: "#f8f8f2",
+    motorModelIds: ["y16zr", "y15zr"],
   },
   {
     id: "green_black",
     label: "Green Black",
     shortLabel: "Green",
     accent: "#6f8f5f",
+    motorModelIds: ["y16zr"],
   },
   {
     id: "blue_silver",
     label: "Blue Silver",
     shortLabel: "Blue",
     accent: "#7897ad",
+    motorModelIds: ["y16zr"],
+  },
+  {
+    id: "grey_gold",
+    label: "Grey Gold",
+    shortLabel: "Grey",
+    accent: "#9a8a6a",
+    motorModelIds: ["y15zr"],
+  },
+  {
+    id: "cyan_orange",
+    label: "Cyan Orange",
+    shortLabel: "Cyan",
+    accent: "#22d3ee",
+    motorModelIds: ["y15zr"],
+  },
+  {
+    id: "dark_orange",
+    label: "Dark Orange",
+    shortLabel: "Dark",
+    accent: "#f97316",
+    motorModelIds: ["y15zr"],
   },
 ] as const;
 
@@ -116,128 +156,53 @@ export const rimColors = [
   },
 ] as const;
 
-export const showroomPreviewAssets = [
-  {
-    id: "y16zr__cyan_black__lcv8_5spoke__magenta",
+const y16Lcv8Pairs = [
+  ["cyan_black", "magenta"],
+  ["cyan_black", "red"],
+  ["cyan_black", "orange_gold"],
+  ["red_black_white", "red"],
+  ["red_black_white", "blue"],
+  ["red_black_white", "magenta"],
+  ["red_black_white", "orange_gold"],
+  ["white_red", "orange_gold"],
+  ["white_red", "blue"],
+  ["white_red", "red"],
+  ["white_red", "magenta"],
+  ["green_black", "red"],
+  ["green_black", "orange_gold"],
+  ["green_black", "blue"],
+  ["green_black", "magenta"],
+] as const satisfies readonly (readonly [CoverSetId, RimColorId])[];
+
+const y15CoverSetIds = ["grey_gold", "cyan_orange", "white_red", "dark_orange"] as const;
+const allRimColorIds = rimColors.map((rimColor) => rimColor.id);
+
+const y16PreviewAssets: ShowroomPreviewAsset[] = y16Lcv8Pairs.map(
+  ([coverSetId, rimColorId]) => ({
+    id: `y16zr__${coverSetId}__lcv8_5spoke__${rimColorId}`,
     motorModelId: "y16zr",
-    coverSetId: "cyan_black",
+    coverSetId,
     rimModelId: "lcv8_5spoke",
-    rimColorId: "magenta",
-    previewImage: `${y16Lcv8Root}/cyan_black__magenta.png`,
-  },
-  {
-    id: "y16zr__cyan_black__lcv8_5spoke__red",
-    motorModelId: "y16zr",
-    coverSetId: "cyan_black",
+    rimColorId,
+    previewImage: `${y16Lcv8Root}/${coverSetId}__${rimColorId}.png`,
+  }),
+);
+
+const y15PreviewAssets: ShowroomPreviewAsset[] = y15CoverSetIds.flatMap((coverSetId) =>
+  allRimColorIds.map((rimColorId) => ({
+    id: `y15zr__${coverSetId}__lcv8_5spoke__${rimColorId}`,
+    motorModelId: "y15zr",
+    coverSetId,
     rimModelId: "lcv8_5spoke",
-    rimColorId: "red",
-    previewImage: `${y16Lcv8Root}/cyan_black__red.png`,
-  },
-  {
-    id: "y16zr__cyan_black__lcv8_5spoke__orange_gold",
-    motorModelId: "y16zr",
-    coverSetId: "cyan_black",
-    rimModelId: "lcv8_5spoke",
-    rimColorId: "orange_gold",
-    previewImage: `${y16Lcv8Root}/cyan_black__orange_gold.png`,
-  },
-  {
-    id: "y16zr__red_black_white__lcv8_5spoke__red",
-    motorModelId: "y16zr",
-    coverSetId: "red_black_white",
-    rimModelId: "lcv8_5spoke",
-    rimColorId: "red",
-    previewImage: `${y16Lcv8Root}/red_black_white__red.png`,
-  },
-  {
-    id: "y16zr__red_black_white__lcv8_5spoke__blue",
-    motorModelId: "y16zr",
-    coverSetId: "red_black_white",
-    rimModelId: "lcv8_5spoke",
-    rimColorId: "blue",
-    previewImage: `${y16Lcv8Root}/red_black_white__blue.png`,
-  },
-  {
-    id: "y16zr__red_black_white__lcv8_5spoke__magenta",
-    motorModelId: "y16zr",
-    coverSetId: "red_black_white",
-    rimModelId: "lcv8_5spoke",
-    rimColorId: "magenta",
-    previewImage: `${y16Lcv8Root}/red_black_white__magenta.png`,
-  },
-  {
-    id: "y16zr__red_black_white__lcv8_5spoke__orange_gold",
-    motorModelId: "y16zr",
-    coverSetId: "red_black_white",
-    rimModelId: "lcv8_5spoke",
-    rimColorId: "orange_gold",
-    previewImage: `${y16Lcv8Root}/red_black_white__orange_gold.png`,
-  },
-  {
-    id: "y16zr__white_red__lcv8_5spoke__orange_gold",
-    motorModelId: "y16zr",
-    coverSetId: "white_red",
-    rimModelId: "lcv8_5spoke",
-    rimColorId: "orange_gold",
-    previewImage: `${y16Lcv8Root}/white_red__orange_gold.png`,
-  },
-  {
-    id: "y16zr__white_red__lcv8_5spoke__blue",
-    motorModelId: "y16zr",
-    coverSetId: "white_red",
-    rimModelId: "lcv8_5spoke",
-    rimColorId: "blue",
-    previewImage: `${y16Lcv8Root}/white_red__blue.png`,
-  },
-  {
-    id: "y16zr__white_red__lcv8_5spoke__red",
-    motorModelId: "y16zr",
-    coverSetId: "white_red",
-    rimModelId: "lcv8_5spoke",
-    rimColorId: "red",
-    previewImage: `${y16Lcv8Root}/white_red__red.png`,
-  },
-  {
-    id: "y16zr__white_red__lcv8_5spoke__magenta",
-    motorModelId: "y16zr",
-    coverSetId: "white_red",
-    rimModelId: "lcv8_5spoke",
-    rimColorId: "magenta",
-    previewImage: `${y16Lcv8Root}/white_red__magenta.png`,
-  },
-  {
-    id: "y16zr__green_black__lcv8_5spoke__red",
-    motorModelId: "y16zr",
-    coverSetId: "green_black",
-    rimModelId: "lcv8_5spoke",
-    rimColorId: "red",
-    previewImage: `${y16Lcv8Root}/green_black__red.png`,
-  },
-  {
-    id: "y16zr__green_black__lcv8_5spoke__orange_gold",
-    motorModelId: "y16zr",
-    coverSetId: "green_black",
-    rimModelId: "lcv8_5spoke",
-    rimColorId: "orange_gold",
-    previewImage: `${y16Lcv8Root}/green_black__orange_gold.png`,
-  },
-  {
-    id: "y16zr__green_black__lcv8_5spoke__blue",
-    motorModelId: "y16zr",
-    coverSetId: "green_black",
-    rimModelId: "lcv8_5spoke",
-    rimColorId: "blue",
-    previewImage: `${y16Lcv8Root}/green_black__blue.png`,
-  },
-  {
-    id: "y16zr__green_black__lcv8_5spoke__magenta",
-    motorModelId: "y16zr",
-    coverSetId: "green_black",
-    rimModelId: "lcv8_5spoke",
-    rimColorId: "magenta",
-    previewImage: `${y16Lcv8Root}/green_black__magenta.png`,
-  },
-] as const satisfies readonly ShowroomPreviewAsset[];
+    rimColorId,
+    previewImage: `${y15Lcv8Root}/${coverSetId}__${rimColorId}.png`,
+  })),
+);
+
+export const showroomPreviewAssets: readonly ShowroomPreviewAsset[] = [
+  ...y16PreviewAssets,
+  ...y15PreviewAssets,
+];
 
 export function getPreviewAsset(
   motorModelId: MotorModelId,
@@ -254,30 +219,15 @@ export function getPreviewAsset(
   );
 }
 
-export function getAvailableCoverSets(motorModelId: MotorModelId, rimModelId: RimModelId) {
+export function getCoverSetsForMotorModel(motorModelId: MotorModelId) {
   return coverSets.filter((coverSet) =>
-    showroomPreviewAssets.some(
-      (asset) =>
-        asset.motorModelId === motorModelId &&
-        asset.rimModelId === rimModelId &&
-        asset.coverSetId === coverSet.id,
-    ),
+    coverSet.motorModelIds.some((supportedModelId) => supportedModelId === motorModelId),
   );
 }
 
-export function getAvailableRimColors(
-  motorModelId: MotorModelId,
-  coverSetId: CoverSetId,
-  rimModelId: RimModelId,
-) {
-  return rimColors.filter((rimColor) =>
-    showroomPreviewAssets.some(
-      (asset) =>
-        asset.motorModelId === motorModelId &&
-        asset.coverSetId === coverSetId &&
-        asset.rimModelId === rimModelId &&
-      asset.rimColorId === rimColor.id,
-    ),
+export function getRimModelsForMotorModel(motorModelId: MotorModelId) {
+  return rimModels.filter((rimModel) =>
+    rimModel.motorModelIds.some((supportedModelId) => supportedModelId === motorModelId),
   );
 }
 
