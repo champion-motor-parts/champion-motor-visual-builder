@@ -9,6 +9,8 @@ type MotorcycleModelViewerProps = {
   src: string;
   alt: string;
   fallbackImage?: string;
+  cameraOrbit?: string;
+  mobileCameraOrbit?: string;
   loadingLabel: string;
   resetLabel: string;
   fullscreenLabel: string;
@@ -22,6 +24,8 @@ export function MotorcycleModelViewer({
   src,
   alt,
   fallbackImage,
+  cameraOrbit = "45deg 72deg 75%",
+  mobileCameraOrbit,
   loadingLabel,
   resetLabel,
   fullscreenLabel,
@@ -34,6 +38,26 @@ export function MotorcycleModelViewer({
   const [progress, setProgress] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [activeCameraOrbit, setActiveCameraOrbit] = useState(cameraOrbit);
+
+  useEffect(() => {
+    setProgress(0);
+    setLoaded(false);
+    setFailed(false);
+  }, [src]);
+
+  useEffect(() => {
+    const mobileQuery = window.matchMedia("(max-width: 639px)");
+    const syncCameraOrbit = () => {
+      setActiveCameraOrbit(
+        mobileQuery.matches ? mobileCameraOrbit ?? cameraOrbit : cameraOrbit,
+      );
+    };
+
+    syncCameraOrbit();
+    mobileQuery.addEventListener("change", syncCameraOrbit);
+    return () => mobileQuery.removeEventListener("change", syncCameraOrbit);
+  }, [cameraOrbit, mobileCameraOrbit]);
 
   useEffect(() => {
     let cancelled = false;
@@ -85,7 +109,7 @@ export function MotorcycleModelViewer({
   function resetCamera() {
     const viewer = viewerRef.current;
     if (!viewer) return;
-    viewer.cameraOrbit = "45deg 72deg 75%";
+    viewer.cameraOrbit = activeCameraOrbit;
     viewer.cameraTarget = "auto auto auto";
     viewer.fieldOfView = "28deg";
     viewer.resetTurntableRotation();
@@ -125,7 +149,7 @@ export function MotorcycleModelViewer({
             loading: "eager",
             reveal: "auto",
             "camera-controls": true,
-            "camera-orbit": "45deg 72deg 75%",
+            "camera-orbit": activeCameraOrbit,
             "field-of-view": "28deg",
             "min-camera-orbit": "auto auto 45%",
             "max-camera-orbit": "auto auto 180%",

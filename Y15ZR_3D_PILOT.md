@@ -3,9 +3,9 @@
 ## Current status
 
 The existing 2D configurator remains the default. The 3D viewer is loaded only after the customer
-selects a combination registered in `src/data/three-d-variants.ts` and taps the 3D view control.
+selects a combination registered in `src/data/showroom/three-d-variants.ts` and taps the 3D view control.
 
-The reviewed pilot GLB is now available for one exact Y15ZR configuration. Every unsupported
+Reviewed GLBs are now available for two exact Y15ZR configurations. Every unsupported
 configuration continues to use its existing 2D preview.
 
 ## Pilot asset
@@ -16,7 +16,7 @@ and the original embedded texture. The final GLB is approximately 4.27 MB and is
 
 `public/models/y15zr/y15zr-pilot.glb`
 
-The registered combination is:
+The registered combinations are:
 
 ```ts
 {
@@ -25,8 +25,21 @@ The registered combination is:
   rimModelId: "lcv8_5spoke",
   rimColorId: "orange_gold",
   glb: "/models/y15zr/y15zr-pilot.glb",
+},
+{
+  modelId: "y15zr",
+  coverSetId: "mx_blue",
+  rimModelId: "lcv8_5spoke",
+  rimColorId: "gold",
+  glb: "/models/y15zr/y15zr-mx-blue.glb",
+  cameraOrbit: "45deg 72deg 82%",
+  mobileCameraOrbit: "45deg 72deg 70%",
 }
 ```
+
+The MX Blue Blender export was cleaned of its lighting and camera helper collections before
+optimization. Its final Draco-compressed GLB is approximately 2.75 MB. Its fixed 2D fallback
+is stored at `public/visual-builder/showroom/y15zr/mx-blue/mx_blue__gold.png`.
 
 Unsupported or unverified combinations remain in 2D mode. Add future entries only after their
 cover set, rim design, and rim colour have been visually confirmed.

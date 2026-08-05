@@ -25,13 +25,14 @@ import {
   getCoverSetsForMotorModel,
   getPreviewAsset,
   getPreviewAssetsForSetup,
+  getRimColorsForSetup,
   getRimModelsForMotorModel,
+  getThreeDVariant,
   motorModels,
   rimColors,
   rimModels,
   showroomPreviewAssets,
-} from "@/data/showroom-preview-assets";
-import { getThreeDVariant } from "@/data/three-d-variants";
+} from "@/data/showroom";
 import { WHATSAPP_PHONE_NUMBER } from "@/lib/config";
 import {
   Locale,
@@ -95,6 +96,7 @@ function SelectField({ label, value, options, onChange }: SelectFieldProps) {
         {label}
       </span>
       <select
+        aria-label={label}
         value={value}
         onChange={(event) => onChange(event.target.value)}
         className="h-12 w-full touch-manipulation rounded-lg border border-white/10 bg-black/50 px-3 text-base font-black text-white outline-none transition hover:border-white/25 focus:border-[var(--accent)] sm:text-sm"
@@ -190,6 +192,10 @@ export function Lcv8RimMatch() {
     () => getRimModelsForMotorModel(motorModelId),
     [motorModelId],
   );
+  const availableRimColors = useMemo(
+    () => getRimColorsForSetup(motorModelId, coverSetId, rimModelId),
+    [coverSetId, motorModelId, rimModelId],
+  );
   const visibleAssets = useMemo(
     () => getPreviewAssetsForSetup(motorModelId, rimModelId),
     [motorModelId, rimModelId],
@@ -235,6 +241,12 @@ export function Lcv8RimMatch() {
       setRimModelId(availableRimModels[0]?.id ?? rimModels[0].id);
     }
   }, [availableRimModels, rimModelId]);
+
+  useEffect(() => {
+    if (!availableRimColors.some((rimColor) => rimColor.id === rimColorId)) {
+      setRimColorId(availableRimColors[0]?.id ?? rimColors[0].id);
+    }
+  }, [availableRimColors, rimColorId]);
 
   useEffect(() => {
     if (viewMode === "3d" && !selectedThreeDVariant) {
@@ -434,6 +446,8 @@ export function Lcv8RimMatch() {
                     src={selectedThreeDVariant.glb}
                     alt={t.model3d}
                     fallbackImage={selectedAsset?.previewImage}
+                    cameraOrbit={selectedThreeDVariant.cameraOrbit}
+                    mobileCameraOrbit={selectedThreeDVariant.mobileCameraOrbit}
                     loadingLabel={t.loading3d}
                     resetLabel={t.resetCamera}
                     fullscreenLabel={t.fullscreen}
@@ -559,7 +573,7 @@ export function Lcv8RimMatch() {
                 <SelectField
                   label={t.rimColor}
                   value={rimColorId}
-                  options={rimColors}
+                  options={availableRimColors}
                   onChange={(value) => setRimColorId(value as RimColorId)}
                 />
               </div>
