@@ -85,9 +85,9 @@ export function MotorcycleModelViewer({
   function resetCamera() {
     const viewer = viewerRef.current;
     if (!viewer) return;
-    viewer.cameraOrbit = "0deg 75deg 105%";
+    viewer.cameraOrbit = "45deg 72deg 75%";
     viewer.cameraTarget = "auto auto auto";
-    viewer.fieldOfView = "30deg";
+    viewer.fieldOfView = "28deg";
     viewer.resetTurntableRotation();
     viewer.jumpCameraToGoal();
   }
@@ -125,6 +125,12 @@ export function MotorcycleModelViewer({
             loading: "eager",
             reveal: "auto",
             "camera-controls": true,
+            "camera-orbit": "45deg 72deg 75%",
+            "field-of-view": "28deg",
+            "min-camera-orbit": "auto auto 45%",
+            "max-camera-orbit": "auto auto 180%",
+            "min-field-of-view": "20deg",
+            "max-field-of-view": "45deg",
             "touch-action": "pan-y",
             "interaction-prompt": "auto",
             "shadow-intensity": "1",

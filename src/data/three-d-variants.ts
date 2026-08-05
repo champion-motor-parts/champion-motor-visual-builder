@@ -15,9 +15,17 @@ export type ThreeDVariant = {
 
 export const Y15ZR_PILOT_GLB_PATH = "/models/y15zr/y15zr-pilot.glb";
 
-// Enable only combinations represented exactly by the exported GLB. The supplied
-// .blend file still needs to be reviewed and exported before an entry is added.
-export const threeDVariants: readonly ThreeDVariant[] = [];
+// The pilot export represents the existing grey/gold Y15ZR setup with the
+// orange-gold LCV8 wheel finish. Keep every other combination on its 2D image.
+export const threeDVariants: readonly ThreeDVariant[] = [
+  {
+    modelId: "y15zr",
+    coverSetId: "grey_gold",
+    rimModelId: "lcv8_5spoke",
+    rimColorId: "orange_gold",
+    glb: Y15ZR_PILOT_GLB_PATH,
+  },
+];
 
 export function getThreeDVariant(
   modelId: MotorModelId,
