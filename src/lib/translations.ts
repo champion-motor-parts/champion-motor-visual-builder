@@ -36,6 +36,8 @@ const en = {
   loading3d: "Loading 3D model",
   resetCamera: "Reset Camera",
   fullscreen: "Fullscreen",
+  showRims: "Show stock rims",
+  hideRims: "Hide stock rims",
   model3d: "Interactive 3D motorcycle model",
 };
 
@@ -75,6 +77,8 @@ const ms: Record<keyof typeof en, string> = {
   loading3d: "Memuatkan model 3D",
   resetCamera: "Set Semula Kamera",
   fullscreen: "Skrin Penuh",
+  showRims: "Tunjukkan rim stok",
+  hideRims: "Sembunyikan rim stok",
   model3d: "Model motosikal 3D interaktif",
 };
 

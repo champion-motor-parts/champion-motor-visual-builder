@@ -16,7 +16,8 @@ export type CoverSetId =
   | "grey_gold"
   | "cyan_orange"
   | "dark_orange"
-  | "mx_blue";
+  | "mx_blue"
+  | "sniper_mx_2015_white_red";
 
 export type RimColorId = "magenta" | "blue" | "red" | "orange_gold" | "gold";
 

@@ -65,11 +65,29 @@ const mxBluePreviewAsset: ShowroomPreviewAsset = {
   previewImage: "/visual-builder/showroom/y15zr/mx-blue/mx_blue__gold.png",
 };
 
-export const showroomPreviewAssets: readonly ShowroomPreviewAsset[] = [
+const sniperMxPreviewAsset: ShowroomPreviewAsset = {
+  id: "y15zr__sniper_mx_2015_white_red__lcv8_5spoke__gold",
+  motorModelId: "y15zr",
+  coverSetId: "sniper_mx_2015_white_red",
+  rimModelId: "lcv8_5spoke",
+  rimColorId: "gold",
+  previewImage:
+    "/visual-builder/showroom/y15zr/sniper-mx-2015/sniper_mx_2015_white_red__gold.png",
+};
+
+const allShowroomPreviewAssets: readonly ShowroomPreviewAsset[] = [
   ...y16PreviewAssets,
   ...y15PreviewAssets,
   mxBluePreviewAsset,
+  sniperMxPreviewAsset,
 ];
+
+export const showroomPreviewAssets = allShowroomPreviewAssets.filter(
+  (asset) =>
+    asset.motorModelId === "y15zr" &&
+    (asset.coverSetId === "mx_blue" ||
+      asset.coverSetId === "sniper_mx_2015_white_red"),
+);
 
 export function getPreviewAsset(
   motorModelId: MotorModelId,

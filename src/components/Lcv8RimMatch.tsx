@@ -47,6 +47,13 @@ const MotorcycleModelViewer = dynamic(
     ),
   { ssr: false },
 );
+const ModularMotorcycleViewer = dynamic(
+  () =>
+    import("@/components/ModularMotorcycleViewer").then(
+      (module) => module.ModularMotorcycleViewer,
+    ),
+  { ssr: false },
+);
 
 type ViewMode = "2d" | "3d";
 
@@ -175,10 +182,10 @@ function GalleryGrid({
 
 export function Lcv8RimMatch() {
   const [locale, setLocale] = useState<Locale>("ms");
-  const [motorModelId, setMotorModelId] = useState<MotorModelId>("y16zr");
+  const [motorModelId, setMotorModelId] = useState<MotorModelId>("y15zr");
   const [rimModelId, setRimModelId] = useState<RimModelId>("lcv8_5spoke");
-  const [coverSetId, setCoverSetId] = useState<CoverSetId>("red_black_white");
-  const [rimColorId, setRimColorId] = useState<RimColorId>("red");
+  const [coverSetId, setCoverSetId] = useState<CoverSetId>("mx_blue");
+  const [rimColorId, setRimColorId] = useState<RimColorId>("gold");
   const [viewMode, setViewMode] = useState<ViewMode>("2d");
   const [viewNotice, setViewNotice] = useState("");
   const [mobileGalleryOpen, setMobileGalleryOpen] = useState(false);
@@ -441,7 +448,23 @@ export function Lcv8RimMatch() {
 
             <div className="bg-[linear-gradient(180deg,rgba(250,250,247,0.98),rgba(230,227,220,0.98))] p-2 sm:p-4">
               <div className="aspect-[3/2] overflow-hidden rounded-lg border border-black/10 bg-stone-100 shadow-inner">
-                {viewMode === "3d" && selectedThreeDVariant ? (
+                {viewMode === "3d" && selectedThreeDVariant?.modular ? (
+                  <ModularMotorcycleViewer
+                    baseSrc={selectedThreeDVariant.modular.base}
+                    coverSetSrc={selectedThreeDVariant.modular.coverSet}
+                    frontRimSrc={selectedThreeDVariant.modular.frontRim}
+                    rearRimSrc={selectedThreeDVariant.modular.rearRim}
+                    alt={t.model3d}
+                    fallbackImage={selectedAsset?.previewImage}
+                    loadingLabel={t.loading3d}
+                    resetLabel={t.resetCamera}
+                    fullscreenLabel={t.fullscreen}
+                    showRimsLabel={t.showRims}
+                    hideRimsLabel={t.hideRims}
+                    failureLabel={t.modelLoadFailure}
+                    onLoadFailure={handle3DLoadFailure}
+                  />
+                ) : viewMode === "3d" && selectedThreeDVariant?.glb ? (
                   <MotorcycleModelViewer
                     src={selectedThreeDVariant.glb}
                     alt={t.model3d}

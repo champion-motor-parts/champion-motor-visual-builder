@@ -32,12 +32,14 @@ type RimColor = {
   hex: string;
 };
 
-export const motorModels: readonly MotorModel[] = [
+const allMotorModels: readonly MotorModel[] = [
   { id: "y16zr", label: "Yamaha Y16ZR", shortLabel: "Y16ZR" },
   { id: "y15zr", label: "Yamaha Y15ZR V1-V2", shortLabel: "Y15ZR" },
 ];
 
-export const rimModels: readonly RimModel[] = [
+export const motorModels = allMotorModels.filter((model) => model.id === "y15zr");
+
+const allRimModels: readonly RimModel[] = [
   {
     id: "lcv8_5spoke",
     label: "LCV8 5-Spoke",
@@ -70,7 +72,12 @@ export const rimModels: readonly RimModel[] = [
   },
 ];
 
-export const coverSets: readonly CoverSet[] = [
+export const rimModels = allRimModels.filter(
+  (rimModel) =>
+    rimModel.id === "lcv8_5spoke" && rimModel.motorModelIds.includes("y15zr"),
+);
+
+const allCoverSets: readonly CoverSet[] = [
   {
     id: "cyan_black",
     label: "Cyan Black",
@@ -121,6 +128,13 @@ export const coverSets: readonly CoverSet[] = [
     motorModelIds: ["y15zr"],
   },
   {
+    id: "sniper_mx_2015_white_red",
+    label: "Sniper MX 2015 White Red",
+    shortLabel: "Sniper MX",
+    accent: "#d71920",
+    motorModelIds: ["y15zr"],
+  },
+  {
     id: "cyan_orange",
     label: "Cyan Orange",
     shortLabel: "Cyan",
@@ -135,6 +149,15 @@ export const coverSets: readonly CoverSet[] = [
     motorModelIds: ["y15zr"],
   },
 ];
+
+const visibleCoverSetIds: readonly CoverSetId[] = [
+  "mx_blue",
+  "sniper_mx_2015_white_red",
+];
+
+export const coverSets = allCoverSets.filter((coverSet) =>
+  visibleCoverSetIds.includes(coverSet.id),
+);
 
 export const rimColors: readonly RimColor[] = [
   { id: "magenta", label: "Magenta", hex: "#d21ac5" },
