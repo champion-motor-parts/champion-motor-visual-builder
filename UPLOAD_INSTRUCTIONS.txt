@@ -1,0 +1,25 @@
+SP522 GITHUB UPLOAD PACKAGE
+
+1. Extract this ZIP file.
+2. Open your existing champion-motor-visual-builder GitHub repository.
+3. Choose Add file > Upload files.
+4. Upload the src and public folders from this extracted package.
+5. Confirm that GitHub preserves the folder paths shown below.
+6. Commit the upload to your working branch first, then check the Vercel preview.
+
+Important:
+- Do not upload the ZIP itself into the repository.
+- Upload the extracted src and public folders into the repository root.
+- Existing files with the same paths must be replaced.
+
+SP522 assets:
+public/models/y15zr/modular/rims/sp522/sp522-front.glb
+public/models/y15zr/modular/rims/sp522/sp522-rear.glb
+
+Updated application files:
+src/components/Lcv8RimMatch.tsx
+src/components/ModularMotorcycleViewer.tsx
+src/data/showroom/catalog.ts
+src/data/showroom/preview-assets.ts
+src/data/showroom/three-d-variants.ts
+src/data/showroom/types.ts
