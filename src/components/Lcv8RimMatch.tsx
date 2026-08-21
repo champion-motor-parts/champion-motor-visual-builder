@@ -328,6 +328,44 @@ export function Lcv8RimMatch() {
     setViewNotice("");
   }
 
+  function changeRimModel(nextRimModelId: RimModelId) {
+    setRimModelId(nextRimModelId);
+    setViewNotice("");
+
+    if (nextRimModelId === "sp522") {
+      if (
+        rimColorId !== "matt_black" &&
+        rimColorId !== "gloss_black" &&
+        rimColorId !== "gold"
+      ) {
+        setRimColorId("gold");
+      }
+      setViewMode("3d");
+    }
+  }
+
+  function changeCoverSet(nextCoverSetId: CoverSetId) {
+    setCoverSetId(nextCoverSetId);
+    setViewNotice("");
+
+    const nextAsset = getPreviewAsset(
+      motorModelId,
+      nextCoverSetId,
+      rimModelId,
+      rimColorId,
+    );
+    const nextThreeDVariant = getThreeDVariant(
+      motorModelId,
+      nextCoverSetId,
+      rimModelId,
+      rimColorId,
+    );
+
+    if (!nextAsset && nextThreeDVariant) {
+      setViewMode("3d");
+    }
+  }
+
   return (
     <main style={themeStyle} className="min-h-dvh overflow-x-hidden text-white">
       <div className="showroom-grid pointer-events-none fixed inset-0 opacity-40" />
@@ -454,6 +492,8 @@ export function Lcv8RimMatch() {
                     coverSetSrc={selectedThreeDVariant.modular.coverSet}
                     frontRimSrc={selectedThreeDVariant.modular.frontRim}
                     rearRimSrc={selectedThreeDVariant.modular.rearRim}
+                    rimColor={selectedRimColor.materialHex ?? selectedRimColor.hex}
+                    rimFinish={selectedRimColor.finish ?? "metallic"}
                     alt={t.model3d}
                     fallbackImage={selectedAsset?.previewImage}
                     loadingLabel={t.loading3d}
@@ -585,13 +625,13 @@ export function Lcv8RimMatch() {
                   label={t.rimType}
                   value={rimModelId}
                   options={availableRimModels}
-                  onChange={(value) => setRimModelId(value as RimModelId)}
+                  onChange={(value) => changeRimModel(value as RimModelId)}
                 />
                 <SelectField
                   label={t.coverSet}
                   value={coverSetId}
                   options={availableCoverSets}
-                  onChange={(value) => setCoverSetId(value as CoverSetId)}
+                  onChange={(value) => changeCoverSet(value as CoverSetId)}
                 />
                 <SelectField
                   label={t.rimColor}

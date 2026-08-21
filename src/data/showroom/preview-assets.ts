@@ -1,4 +1,4 @@
-import { rimColors } from "@/data/showroom/catalog";
+import { rimColors, rimModels } from "@/data/showroom/catalog";
 import type {
   CoverSetId,
   MotorModelId,
@@ -126,7 +126,11 @@ export function getRimColorsForSetup(
       .map((asset) => asset.rimColorId),
   );
 
-  if (supportedColorIds.size === 0) return rimColors;
+  if (supportedColorIds.size === 0) {
+    const rimModel = rimModels.find((item) => item.id === rimModelId);
+    if (!rimModel?.rimColorIds) return rimColors;
+    return rimColors.filter((rimColor) => rimModel.rimColorIds?.includes(rimColor.id));
+  }
   return rimColors.filter((rimColor) => supportedColorIds.has(rimColor.id));
 }
 

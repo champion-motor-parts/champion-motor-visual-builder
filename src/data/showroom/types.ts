@@ -1,6 +1,7 @@
 export type MotorModelId = "y16zr" | "y15zr";
 
 export type RimModelId =
+  | "sp522"
   | "lcv8_5spoke"
   | "six_spoke_sport"
   | "y_spoke_racing"
@@ -17,9 +18,20 @@ export type CoverSetId =
   | "cyan_orange"
   | "dark_orange"
   | "mx_blue"
-  | "sniper_mx_2015_white_red";
+  | "sniper_mx_2015_white_red"
+  | "exciter_rc_black_green"
+  | "exciter_rc_black_purple"
+  | "exciter_rc_white_red"
+  | "exciter_rc_black_red";
 
-export type RimColorId = "magenta" | "blue" | "red" | "orange_gold" | "gold";
+export type RimColorId =
+  | "matt_black"
+  | "gloss_black"
+  | "magenta"
+  | "blue"
+  | "red"
+  | "orange_gold"
+  | "gold";
 
 export type ShowroomPreviewAsset = {
   id: string;
