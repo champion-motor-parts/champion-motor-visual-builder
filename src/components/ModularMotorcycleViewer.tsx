@@ -10,6 +10,30 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 type RimFinish = "matte" | "gloss" | "metallic";
 
+type HorizontalAxis = "x" | "z";
+
+function getStandardCameraOffset(
+  base: THREE.Object3D,
+  radius: number,
+  aspect: number,
+) {
+  const baseSize = new THREE.Box3()
+    .setFromObject(base)
+    .getSize(new THREE.Vector3());
+  const longitudinalAxis: HorizontalAxis = baseSize.x > baseSize.z ? "x" : "z";
+  const distance = radius * Math.max(2.35, 2.35 / Math.min(aspect, 1));
+  const height = radius * 0.34;
+  const threeQuarterOffset = radius * 0.42;
+
+  return {
+    longitudinalAxis,
+    offset:
+      longitudinalAxis === "x"
+        ? new THREE.Vector3(threeQuarterOffset, height, distance)
+        : new THREE.Vector3(distance, height, threeQuarterOffset),
+  };
+}
+
 function cloneRimMaterials(group: THREE.Object3D) {
   group.traverse((object) => {
     if (!(object instanceof THREE.Mesh)) return;
@@ -196,9 +220,16 @@ export function ModularMotorcycleViewer({
         const bounds = new THREE.Box3().setFromObject(scene);
         const sphere = bounds.getBoundingSphere(new THREE.Sphere());
         const radius = Math.max(sphere.radius, 1);
+        const { longitudinalAxis, offset } = getStandardCameraOffset(
+          base,
+          radius,
+          camera.aspect,
+        );
         const initialPosition = sphere.center
           .clone()
-          .add(new THREE.Vector3(radius * 2.25, radius * 0.38, radius * 0.78));
+          .add(offset);
+
+        renderer.domElement.dataset.longitudinalAxis = longitudinalAxis;
 
         resetCameraRef.current = () => {
           controls.target.copy(sphere.center);

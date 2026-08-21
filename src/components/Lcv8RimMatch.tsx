@@ -500,6 +500,12 @@ export function Lcv8RimMatch() {
               <div className="aspect-[3/2] overflow-hidden rounded-lg border border-black/10 bg-stone-100 shadow-inner">
                 {viewMode === "3d" && selectedThreeDVariant?.modular ? (
                   <ModularMotorcycleViewer
+                    key={[
+                      selectedThreeDVariant.modular.base,
+                      selectedThreeDVariant.modular.coverSet,
+                      selectedThreeDVariant.modular.frontRim,
+                      selectedThreeDVariant.modular.rearRim,
+                    ].join("|")}
                     baseSrc={selectedThreeDVariant.modular.base}
                     coverSetSrc={selectedThreeDVariant.modular.coverSet}
                     frontRimSrc={selectedThreeDVariant.modular.frontRim}
