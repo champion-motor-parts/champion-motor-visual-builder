@@ -103,8 +103,13 @@ export function getPreviewAsset(
 }
 
 export function getPreviewAssetsForSetup(motorModelId: MotorModelId, rimModelId: RimModelId) {
+  const rimModel = rimModels.find((item) => item.id === rimModelId);
+
   return showroomPreviewAssets.filter(
-    (asset) => asset.motorModelId === motorModelId && asset.rimModelId === rimModelId,
+    (asset) =>
+      asset.motorModelId === motorModelId &&
+      asset.rimModelId === rimModelId &&
+      (!rimModel?.rimColorIds || rimModel.rimColorIds.includes(asset.rimColorId)),
   );
 }
 
