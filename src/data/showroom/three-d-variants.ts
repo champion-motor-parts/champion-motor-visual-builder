@@ -21,6 +21,49 @@ export type ThreeDVariant = {
   mobileCameraOrbit?: string;
 };
 
+const modularCoverSets: readonly {
+  coverSetId: CoverSetId;
+  path?: string;
+  base?: string;
+}[] = [
+  {
+    coverSetId: "mx_blue",
+    path: "/models/y15zr/modular/coversets/coverset-mx-blue.glb",
+  },
+  {
+    coverSetId: "sniper_mx_2015_white_red",
+    path: "/models/y15zr/modular/coversets/coverset-sniper-mx-2015-white-red.glb",
+  },
+  {
+    coverSetId: "exciter_rc_black_green",
+    base: "/models/y15zr/variants/exciter-rc-black-green-no-rims.glb",
+  },
+  {
+    coverSetId: "exciter_rc_black_purple",
+    base: "/models/y15zr/variants/exciter-rc-black-purple-no-rims.glb",
+  },
+  {
+    coverSetId: "exciter_rc_white_red",
+    base: "/models/y15zr/variants/exciter-rc-white-red-no-rims.glb",
+  },
+  {
+    coverSetId: "exciter_rc_black_red",
+    base: "/models/y15zr/variants/exciter-rc-black-red-no-rims.glb",
+  },
+] as const;
+
+const lcv8ColorIds = [
+  "matt_black",
+  "gloss_black",
+  "magenta",
+  "blue",
+  "red",
+  "orange_gold",
+  "gold",
+] as const;
+
+const sp522ColorIds = ["matt_black", "gloss_black", "gold"] as const;
+
 export const threeDVariants: readonly ThreeDVariant[] = [
   {
     modelId: "y15zr",
@@ -29,31 +72,36 @@ export const threeDVariants: readonly ThreeDVariant[] = [
     rimColorId: "orange_gold",
     glb: "/models/y15zr/y15zr-pilot.glb",
   },
-  {
-    modelId: "y15zr",
-    coverSetId: "mx_blue",
-    rimModelId: "lcv8_5spoke",
-    rimColorId: "gold",
-    modular: {
-      base: "/models/y15zr/modular/y15zr-core.glb",
-      coverSet: "/models/y15zr/modular/coversets/coverset-mx-blue.glb",
-      frontRim: "/models/y15zr/modular/y15zr-rim-stock-front.glb",
-      rearRim: "/models/y15zr/modular/y15zr-rim-stock-rear.glb",
-    },
-  },
-  {
-    modelId: "y15zr",
-    coverSetId: "sniper_mx_2015_white_red",
-    rimModelId: "lcv8_5spoke",
-    rimColorId: "gold",
-    modular: {
-      base: "/models/y15zr/modular/y15zr-core.glb",
-      coverSet:
-        "/models/y15zr/modular/coversets/coverset-sniper-mx-2015-white-red.glb",
-      frontRim: "/models/y15zr/modular/y15zr-rim-stock-front.glb",
-      rearRim: "/models/y15zr/modular/y15zr-rim-stock-rear.glb",
-    },
-  },
+  ...modularCoverSets.flatMap(({ coverSetId, path, base }) => [
+    ...lcv8ColorIds.map(
+      (rimColorId): ThreeDVariant => ({
+        modelId: "y15zr",
+        coverSetId,
+        rimModelId: "lcv8_5spoke",
+        rimColorId,
+        modular: {
+          base: base ?? "/models/y15zr/modular/y15zr-core.glb",
+          coverSet: path,
+          frontRim: "/models/y15zr/modular/y15zr-rim-stock-front.glb",
+          rearRim: "/models/y15zr/modular/y15zr-rim-stock-rear.glb",
+        },
+      }),
+    ),
+    ...sp522ColorIds.map(
+      (rimColorId): ThreeDVariant => ({
+        modelId: "y15zr",
+        coverSetId,
+        rimModelId: "sp522",
+        rimColorId,
+        modular: {
+          base: base ?? "/models/y15zr/modular/y15zr-core.glb",
+          coverSet: path,
+          frontRim: "/models/y15zr/modular/rims/sp522/sp522-front.glb",
+          rearRim: "/models/y15zr/modular/rims/sp522/sp522-rear.glb",
+        },
+      }),
+    ),
+  ]),
 ];
 
 export function getThreeDVariant(

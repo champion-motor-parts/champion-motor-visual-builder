@@ -8,11 +8,53 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
+type RimFinish = "matte" | "gloss" | "metallic";
+
+function cloneRimMaterials(group: THREE.Object3D) {
+  group.traverse((object) => {
+    if (!(object instanceof THREE.Mesh)) return;
+    object.material = Array.isArray(object.material)
+      ? object.material.map((material) => material.clone())
+      : object.material.clone();
+  });
+}
+
+function updateRimAppearance(
+  groups: readonly THREE.Object3D[],
+  color: string,
+  finish: RimFinish,
+) {
+  const materialSettings = {
+    matte: { metalness: 0.72, roughness: 0.64 },
+    gloss: { metalness: 0.86, roughness: 0.12 },
+    metallic: { metalness: 0.92, roughness: 0.22 },
+  }[finish];
+
+  groups.forEach((group) => {
+    group.traverse((object) => {
+      if (!(object instanceof THREE.Mesh)) return;
+      const materials = Array.isArray(object.material)
+        ? object.material
+        : [object.material];
+
+      materials.forEach((material) => {
+        if (!(material instanceof THREE.MeshStandardMaterial)) return;
+        material.color.set(color);
+        material.metalness = materialSettings.metalness;
+        material.roughness = materialSettings.roughness;
+        material.needsUpdate = true;
+      });
+    });
+  });
+}
+
 type ModularMotorcycleViewerProps = {
   baseSrc: string;
   coverSetSrc?: string;
   frontRimSrc: string;
   rearRimSrc: string;
+  rimColor: string;
+  rimFinish: RimFinish;
   alt: string;
   fallbackImage?: string;
   loadingLabel: string;
@@ -29,6 +71,8 @@ export function ModularMotorcycleViewer({
   coverSetSrc,
   frontRimSrc,
   rearRimSrc,
+  rimColor,
+  rimFinish,
   alt,
   fallbackImage,
   loadingLabel,
@@ -43,6 +87,7 @@ export function ModularMotorcycleViewer({
   const canvasHostRef = useRef<HTMLDivElement | null>(null);
   const resetCameraRef = useRef<() => void>(() => undefined);
   const rimGroupsRef = useRef<THREE.Object3D[]>([]);
+  const rimAppearanceRef = useRef({ color: rimColor, finish: rimFinish });
   const [progress, setProgress] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -72,7 +117,7 @@ export function ModularMotorcycleViewer({
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.05;
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.type = THREE.PCFShadowMap;
     renderer.domElement.setAttribute("aria-label", alt);
     renderer.domElement.setAttribute("role", "img");
     renderer.domElement.className = "h-full w-full touch-none";
@@ -139,7 +184,14 @@ export function ModularMotorcycleViewer({
             });
             scene.add(group);
           });
-        rimGroupsRef.current = [frontRim, rearRim];
+        const rimGroups = [frontRim, rearRim];
+        rimGroups.forEach(cloneRimMaterials);
+        rimGroupsRef.current = rimGroups;
+        updateRimAppearance(
+          rimGroups,
+          rimAppearanceRef.current.color,
+          rimAppearanceRef.current.finish,
+        );
 
         const bounds = new THREE.Box3().setFromObject(scene);
         const sphere = bounds.getBoundingSphere(new THREE.Sphere());
@@ -192,6 +244,11 @@ export function ModularMotorcycleViewer({
       rimGroupsRef.current = [];
     };
   }, [alt, baseSrc, coverSetSrc, frontRimSrc, onLoadFailure, rearRimSrc]);
+
+  useEffect(() => {
+    rimAppearanceRef.current = { color: rimColor, finish: rimFinish };
+    updateRimAppearance(rimGroupsRef.current, rimColor, rimFinish);
+  }, [rimColor, rimFinish]);
 
   function toggleRims() {
     const nextVisible = !rimsVisible;
