@@ -117,7 +117,7 @@ export function ModularMotorcycleViewer({
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.05;
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.type = THREE.PCFShadowMap;
     renderer.domElement.setAttribute("aria-label", alt);
     renderer.domElement.setAttribute("role", "img");
     renderer.domElement.className = "h-full w-full touch-none";

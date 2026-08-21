@@ -92,10 +92,7 @@ export function detectPreferredLocale(): Locale {
 
   const language = window.navigator.language.toLowerCase();
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const isMalaysian =
-    language.startsWith("ms") ||
-    language.endsWith("-my") ||
-    timeZone === "Asia/Kuala_Lumpur";
+  const isMalaysian = language.startsWith("ms") || language.endsWith("-my") || timeZone === "Asia/Kuala_Lumpur";
 
   return isMalaysian ? "ms" : "en";
 }

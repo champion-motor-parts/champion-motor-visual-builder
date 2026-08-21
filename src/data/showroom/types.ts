@@ -18,11 +18,16 @@ export type CoverSetId =
   | "cyan_orange"
   | "dark_orange"
   | "mx_blue"
-  | "sniper_mx_2015_white_red";
+  | "sniper_mx_2015_white_red"
+  | "exciter_rc_black_green"
+  | "exciter_rc_black_purple"
+  | "exciter_rc_white_red"
+  | "exciter_rc_black_red";
 
 export type RimColorId =
   | "matt_black"
   | "gloss_black"
+  | "white"
   | "magenta"
   | "blue"
   | "red"

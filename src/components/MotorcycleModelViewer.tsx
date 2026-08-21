@@ -1,11 +1,9 @@
 "use client";
 
+import type { ModelViewerElement } from "@google/model-viewer";
 import { Maximize2, RotateCcw } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { createElement, useEffect, useRef, useState } from "react";
 
 type MotorcycleModelViewerProps = {
   src: string;
@@ -20,10 +18,14 @@ type MotorcycleModelViewerProps = {
   onLoadFailure: () => void;
 };
 
+type ProgressEvent = CustomEvent<{ totalProgress: number }>;
+
 export function MotorcycleModelViewer({
   src,
   alt,
   fallbackImage,
+  cameraOrbit = "45deg 72deg 75%",
+  mobileCameraOrbit,
   loadingLabel,
   resetLabel,
   fullscreenLabel,
@@ -31,158 +33,88 @@ export function MotorcycleModelViewer({
   onLoadFailure,
 }: MotorcycleModelViewerProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const canvasHostRef = useRef<HTMLDivElement | null>(null);
-  const resetCameraRef = useRef<() => void>(() => undefined);
-
+  const viewerRef = useRef<ModelViewerElement | null>(null);
+  const [viewerRegistered, setViewerRegistered] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [activeCameraOrbit, setActiveCameraOrbit] = useState(cameraOrbit);
 
   useEffect(() => {
-    const host = canvasHostRef.current;
-    if (!host) return;
-
-    let disposed = false;
-    let animationFrame = 0;
-
+    setProgress(0);
     setLoaded(false);
     setFailed(false);
-    setProgress(0);
+  }, [src]);
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(30, 1, 0.01, 1000);
-
-    const renderer = new THREE.WebGLRenderer({
-      antialias: true,
-      alpha: true,
-      powerPreference: "high-performance",
-    });
-
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.05;
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    renderer.domElement.setAttribute("aria-label", alt);
-    renderer.domElement.setAttribute("role", "img");
-    renderer.domElement.className = "h-full w-full touch-none";
-
-    host.appendChild(renderer.domElement);
-
-    scene.add(new THREE.HemisphereLight(0xffffff, 0x4b5563, 2.4));
-
-    const keyLight = new THREE.DirectionalLight(0xffffff, 4.2);
-    keyLight.position.set(4, 7, 5);
-    keyLight.castShadow = true;
-    scene.add(keyLight);
-
-    const fillLight = new THREE.DirectionalLight(0xbfd5ff, 2.2);
-    fillLight.position.set(-4, 3, -5);
-    scene.add(fillLight);
-
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.08;
-    controls.enablePan = false;
-    controls.minDistance = 0.2;
-    controls.maxDistance = 100;
-
-    const resize = () => {
-      const width = Math.max(1, host.clientWidth);
-      const height = Math.max(1, host.clientHeight);
-      renderer.setSize(width, height, false);
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
+  useEffect(() => {
+    const mobileQuery = window.matchMedia("(max-width: 639px)");
+    const syncCameraOrbit = () => {
+      setActiveCameraOrbit(
+        mobileQuery.matches ? mobileCameraOrbit ?? cameraOrbit : cameraOrbit,
+      );
     };
 
-    const resizeObserver = new ResizeObserver(resize);
-    resizeObserver.observe(host);
-    resize();
+    syncCameraOrbit();
+    mobileQuery.addEventListener("change", syncCameraOrbit);
+    return () => mobileQuery.removeEventListener("change", syncCameraOrbit);
+  }, [cameraOrbit, mobileCameraOrbit]);
 
-    const manager = new THREE.LoadingManager();
-    manager.onProgress = (_url, itemsLoaded, itemsTotal) => {
-      if (!disposed) {
-        setProgress(itemsTotal > 0 ? itemsLoaded / itemsTotal : 0);
-      }
-    };
+  useEffect(() => {
+    let cancelled = false;
 
-    const loader = new GLTFLoader(manager);
-
-    loader.load(
-      src,
-      (gltf) => {
-        if (disposed) return;
-
-        const model = gltf.scene;
-
-        model.traverse((object) => {
-          if (!(object instanceof THREE.Mesh)) return;
-          object.castShadow = true;
-          object.receiveShadow = true;
-        });
-
-        scene.add(model);
-
-        const bounds = new THREE.Box3().setFromObject(model);
-        const sphere = bounds.getBoundingSphere(new THREE.Sphere());
-        const radius = Math.max(sphere.radius, 0.5);
-
-        const initialPosition = sphere.center
-          .clone()
-          .add(new THREE.Vector3(radius * 2.25, radius * 0.5, radius * 0.9));
-
-        resetCameraRef.current = () => {
-          controls.target.copy(sphere.center);
-          camera.position.copy(initialPosition);
-          camera.near = Math.max(0.01, radius / 100);
-          camera.far = Math.max(100, radius * 30);
-          camera.updateProjectionMatrix();
-          controls.minDistance = radius * 0.65;
-          controls.maxDistance = radius * 8;
-          controls.update();
-        };
-
-        resetCameraRef.current();
-        setProgress(1);
-        setLoaded(true);
-      },
-      undefined,
-      () => {
-        if (disposed) return;
+    import("@google/model-viewer")
+      .then(() => {
+        if (!cancelled) setViewerRegistered(true);
+      })
+      .catch(() => {
+        if (cancelled) return;
         setFailed(true);
         onLoadFailure();
-      },
-    );
-
-    const animate = () => {
-      controls.update();
-      renderer.render(scene, camera);
-      animationFrame = window.requestAnimationFrame(animate);
-    };
-    animate();
-
-    return () => {
-      disposed = true;
-      window.cancelAnimationFrame(animationFrame);
-      resizeObserver.disconnect();
-      controls.dispose();
-
-      scene.traverse((object) => {
-        if (!(object instanceof THREE.Mesh)) return;
-
-        object.geometry.dispose();
-        const materials = Array.isArray(object.material)
-          ? object.material
-          : [object.material];
-
-        materials.forEach((material) => material.dispose());
       });
 
-      renderer.dispose();
-      renderer.domElement.remove();
+    return () => {
+      cancelled = true;
     };
-  }, [alt, onLoadFailure, src]);
+  }, [onLoadFailure]);
+
+  useEffect(() => {
+    if (!viewerRegistered) return;
+    const viewer = viewerRef.current;
+    if (!viewer) return;
+
+    const handleLoad = () => {
+      setProgress(1);
+      setLoaded(true);
+    };
+    const handleError = () => {
+      setFailed(true);
+      onLoadFailure();
+    };
+    const handleProgress = (event: Event) => {
+      const nextProgress = (event as ProgressEvent).detail?.totalProgress ?? 0;
+      setProgress(Math.max(0, Math.min(1, nextProgress)));
+    };
+
+    viewer.addEventListener("load", handleLoad);
+    viewer.addEventListener("error", handleError);
+    viewer.addEventListener("progress", handleProgress);
+
+    return () => {
+      viewer.removeEventListener("load", handleLoad);
+      viewer.removeEventListener("error", handleError);
+      viewer.removeEventListener("progress", handleProgress);
+    };
+  }, [onLoadFailure, viewerRegistered]);
+
+  function resetCamera() {
+    const viewer = viewerRef.current;
+    if (!viewer) return;
+    viewer.cameraOrbit = activeCameraOrbit;
+    viewer.cameraTarget = "auto auto auto";
+    viewer.fieldOfView = "28deg";
+    viewer.resetTurntableRotation();
+    viewer.jumpCameraToGoal();
+  }
 
   async function enterFullscreen() {
     if (!containerRef.current || !document.fullscreenEnabled) return;
@@ -192,12 +124,9 @@ export function MotorcycleModelViewer({
   return (
     <div
       ref={containerRef}
-      data-render-state={failed ? "failed" : loaded ? "loaded" : "loading"}
       className="relative h-full w-full overflow-hidden bg-[#ece9e2]"
       aria-label={alt}
     >
-      <div ref={canvasHostRef} className="h-full w-full" />
-
       {failed && fallbackImage ? (
         <Image
           src={fallbackImage}
@@ -206,9 +135,33 @@ export function MotorcycleModelViewer({
           priority
           sizes="(min-width: 1024px) 68vw, 100vw"
           alt={alt}
-          className="absolute inset-0 h-full w-full object-contain"
+          className="h-full w-full object-contain"
         />
       ) : null}
+
+      {!failed && viewerRegistered
+        ? createElement("model-viewer", {
+            ref: (element: ModelViewerElement | null) => {
+              viewerRef.current = element;
+            },
+            src,
+            alt,
+            loading: "eager",
+            reveal: "auto",
+            "camera-controls": true,
+            "camera-orbit": activeCameraOrbit,
+            "field-of-view": "28deg",
+            "min-camera-orbit": "auto auto 45%",
+            "max-camera-orbit": "auto auto 180%",
+            "min-field-of-view": "20deg",
+            "max-field-of-view": "45deg",
+            "touch-action": "pan-y",
+            "interaction-prompt": "auto",
+            "shadow-intensity": "1",
+            exposure: "1",
+            style: { width: "100%", height: "100%", background: "transparent" },
+          })
+        : null}
 
       {!loaded && !failed ? (
         <div className="pointer-events-none absolute inset-x-0 top-0 z-10 bg-black/75 px-4 py-3 text-white">
@@ -235,22 +188,23 @@ export function MotorcycleModelViewer({
         <div className="absolute inset-x-3 bottom-3 z-10 flex justify-end gap-2">
           <button
             type="button"
-            onClick={() => resetCameraRef.current()}
+            onClick={resetCamera}
             title={resetLabel}
             aria-label={resetLabel}
-            className="inline-flex size-11 items-center justify-center rounded-lg border border-white/15 bg-black/80 text-white shadow-lg transition hover:bg-black"
+            className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-white/15 bg-black/80 px-3 text-xs font-black text-white shadow-lg transition hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
           >
-            <RotateCcw size={18} aria-hidden="true" />
+            <RotateCcw size={17} aria-hidden="true" />
+            <span className="hidden sm:inline">{resetLabel}</span>
           </button>
-
           <button
             type="button"
             onClick={enterFullscreen}
             title={fullscreenLabel}
             aria-label={fullscreenLabel}
-            className="inline-flex size-11 items-center justify-center rounded-lg border border-white/15 bg-black/80 text-white shadow-lg transition hover:bg-black"
+            className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-white/15 bg-black/80 px-3 text-xs font-black text-white shadow-lg transition hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
           >
-            <Maximize2 size={18} aria-hidden="true" />
+            <Maximize2 size={17} aria-hidden="true" />
+            <span className="hidden sm:inline">{fullscreenLabel}</span>
           </button>
         </div>
       ) : null}

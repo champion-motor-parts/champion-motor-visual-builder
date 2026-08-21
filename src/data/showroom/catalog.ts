@@ -52,9 +52,10 @@ const allRimModels: readonly RimModel[] = [
   },
   {
     id: "lcv8_5spoke",
-    label: "LCV8 5-Spoke",
-    shortLabel: "LCV8",
+    label: "6Batang",
+    shortLabel: "6Batang",
     motorModelIds: ["y16zr", "y15zr"],
+    rimColorIds: ["matt_black", "gloss_black", "white"],
   },
   {
     id: "six_spoke_sport",
@@ -146,6 +147,34 @@ const allCoverSets: readonly CoverSet[] = [
     motorModelIds: ["y15zr"],
   },
   {
+    id: "exciter_rc_black_green",
+    label: "Exciter RC Black Green",
+    shortLabel: "RC Black Green",
+    accent: "#2f7a4c",
+    motorModelIds: ["y15zr"],
+  },
+  {
+    id: "exciter_rc_black_purple",
+    label: "Exciter RC Black Purple",
+    shortLabel: "RC Black Purple",
+    accent: "#7b3fc5",
+    motorModelIds: ["y15zr"],
+  },
+  {
+    id: "exciter_rc_white_red",
+    label: "Exciter RC White Red",
+    shortLabel: "RC White Red",
+    accent: "#e53935",
+    motorModelIds: ["y15zr"],
+  },
+  {
+    id: "exciter_rc_black_red",
+    label: "Exciter RC Black Red",
+    shortLabel: "RC Black Red",
+    accent: "#c51f2d",
+    motorModelIds: ["y15zr"],
+  },
+  {
     id: "cyan_orange",
     label: "Cyan Orange",
     shortLabel: "Cyan",
@@ -164,6 +193,10 @@ const allCoverSets: readonly CoverSet[] = [
 const visibleCoverSetIds: readonly CoverSetId[] = [
   "mx_blue",
   "sniper_mx_2015_white_red",
+  "exciter_rc_black_green",
+  "exciter_rc_black_purple",
+  "exciter_rc_white_red",
+  "exciter_rc_black_red",
 ];
 
 export const coverSets = allCoverSets.filter((coverSet) =>
@@ -183,6 +216,13 @@ export const rimColors: readonly RimColor[] = [
     label: "Gloss Black",
     hex: "#25272b",
     materialHex: "#050506",
+    finish: "gloss",
+  },
+  {
+    id: "white",
+    label: "White",
+    hex: "#f4f4f2",
+    materialHex: "#e8e8e3",
     finish: "gloss",
   },
   { id: "magenta", label: "Magenta", hex: "#d21ac5" },
