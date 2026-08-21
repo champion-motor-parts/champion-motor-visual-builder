@@ -185,8 +185,8 @@ export function Lcv8RimMatch() {
   const [motorModelId, setMotorModelId] = useState<MotorModelId>("y15zr");
   const [rimModelId, setRimModelId] = useState<RimModelId>("lcv8_5spoke");
   const [coverSetId, setCoverSetId] = useState<CoverSetId>("mx_blue");
-  const [rimColorId, setRimColorId] = useState<RimColorId>("gold");
-  const [viewMode, setViewMode] = useState<ViewMode>("2d");
+  const [rimColorId, setRimColorId] = useState<RimColorId>("matt_black");
+  const [viewMode, setViewMode] = useState<ViewMode>("3d");
   const [viewNotice, setViewNotice] = useState("");
   const [mobileGalleryOpen, setMobileGalleryOpen] = useState(false);
 
@@ -339,6 +339,18 @@ export function Lcv8RimMatch() {
         rimColorId !== "gold"
       ) {
         setRimColorId("gold");
+      }
+      setViewMode("3d");
+      return;
+    }
+
+    if (nextRimModelId === "lcv8_5spoke") {
+      if (
+        rimColorId !== "matt_black" &&
+        rimColorId !== "gloss_black" &&
+        rimColorId !== "white"
+      ) {
+        setRimColorId("matt_black");
       }
       setViewMode("3d");
     }

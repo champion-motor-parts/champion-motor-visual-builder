@@ -29,9 +29,7 @@ const y16Lcv8Pairs = [
 ] as const satisfies readonly (readonly [CoverSetId, RimColorId])[];
 
 const legacyY15CoverSetIds = ["grey_gold", "cyan_orange", "white_red", "dark_orange"] as const;
-const legacyRimColorIds = rimColors
-  .map((rimColor) => rimColor.id)
-  .filter((rimColorId): rimColorId is Exclude<RimColorId, "gold"> => rimColorId !== "gold");
+const legacyRimColorIds = ["magenta", "blue", "red", "orange_gold"] as const;
 
 const y16PreviewAssets: ShowroomPreviewAsset[] = y16Lcv8Pairs.map(
   ([coverSetId, rimColorId]) => ({
@@ -126,11 +124,12 @@ export function getRimColorsForSetup(
       .map((asset) => asset.rimColorId),
   );
 
-  if (supportedColorIds.size === 0) {
-    const rimModel = rimModels.find((item) => item.id === rimModelId);
-    if (!rimModel?.rimColorIds) return rimColors;
+  const rimModel = rimModels.find((item) => item.id === rimModelId);
+  if (rimModel?.rimColorIds) {
     return rimColors.filter((rimColor) => rimModel.rimColorIds?.includes(rimColor.id));
   }
+
+  if (supportedColorIds.size === 0) return rimColors;
   return rimColors.filter((rimColor) => supportedColorIds.has(rimColor.id));
 }
 

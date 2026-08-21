@@ -52,9 +52,10 @@ const allRimModels: readonly RimModel[] = [
   },
   {
     id: "lcv8_5spoke",
-    label: "LCV8 5-Spoke",
-    shortLabel: "LCV8",
+    label: "6Batang",
+    shortLabel: "6Batang",
     motorModelIds: ["y16zr", "y15zr"],
+    rimColorIds: ["matt_black", "gloss_black", "white"],
   },
   {
     id: "six_spoke_sport",
@@ -215,6 +216,13 @@ export const rimColors: readonly RimColor[] = [
     label: "Gloss Black",
     hex: "#25272b",
     materialHex: "#050506",
+    finish: "gloss",
+  },
+  {
+    id: "white",
+    label: "White",
+    hex: "#f4f4f2",
+    materialHex: "#e8e8e3",
     finish: "gloss",
   },
   { id: "magenta", label: "Magenta", hex: "#d21ac5" },

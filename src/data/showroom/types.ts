@@ -27,6 +27,7 @@ export type CoverSetId =
 export type RimColorId =
   | "matt_black"
   | "gloss_black"
+  | "white"
   | "magenta"
   | "blue"
   | "red"

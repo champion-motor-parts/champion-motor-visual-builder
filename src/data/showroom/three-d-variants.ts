@@ -52,15 +52,7 @@ const modularCoverSets: readonly {
   },
 ] as const;
 
-const lcv8ColorIds = [
-  "matt_black",
-  "gloss_black",
-  "magenta",
-  "blue",
-  "red",
-  "orange_gold",
-  "gold",
-] as const;
+const lcv8ColorIds = ["matt_black", "gloss_black", "white"] as const;
 
 const sp522ColorIds = ["matt_black", "gloss_black", "gold"] as const;
 
