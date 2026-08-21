@@ -175,6 +175,48 @@ const allCoverSets: readonly CoverSet[] = [
     motorModelIds: ["y15zr"],
   },
   {
+    id: "mx_king_matte_blue",
+    label: "MX King Matte Blue",
+    shortLabel: "MX King Matte Blue",
+    accent: "#31556d",
+    motorModelIds: ["y15zr"],
+  },
+  {
+    id: "mx_king_silver_blue",
+    label: "MX King Silver Blue",
+    shortLabel: "MX King Silver Blue",
+    accent: "#8aa4b7",
+    motorModelIds: ["y15zr"],
+  },
+  {
+    id: "mx_king_red",
+    label: "MX King Red",
+    shortLabel: "MX King Red",
+    accent: "#cf272d",
+    motorModelIds: ["y15zr"],
+  },
+  {
+    id: "mx_king_yellow",
+    label: "MX King Yellow",
+    shortLabel: "MX King Yellow",
+    accent: "#e4b21f",
+    motorModelIds: ["y15zr"],
+  },
+  {
+    id: "jupiter_mx_white_blue",
+    label: "Jupiter MX White Blue",
+    shortLabel: "Jupiter White Blue",
+    accent: "#2c61c9",
+    motorModelIds: ["y15zr"],
+  },
+  {
+    id: "jupiter_mx_white_red",
+    label: "Jupiter MX White Red",
+    shortLabel: "Jupiter White Red",
+    accent: "#d92b2b",
+    motorModelIds: ["y15zr"],
+  },
+  {
     id: "cyan_orange",
     label: "Cyan Orange",
     shortLabel: "Cyan",
@@ -197,6 +239,12 @@ const visibleCoverSetIds: readonly CoverSetId[] = [
   "exciter_rc_black_purple",
   "exciter_rc_white_red",
   "exciter_rc_black_red",
+  "mx_king_matte_blue",
+  "mx_king_silver_blue",
+  "mx_king_red",
+  "mx_king_yellow",
+  "jupiter_mx_white_blue",
+  "jupiter_mx_white_red",
 ];
 
 export const coverSets = allCoverSets.filter((coverSet) =>

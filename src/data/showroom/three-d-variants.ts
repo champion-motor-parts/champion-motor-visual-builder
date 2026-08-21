@@ -50,6 +50,30 @@ const modularCoverSets: readonly {
     coverSetId: "exciter_rc_black_red",
     base: "/models/y15zr/variants/exciter-rc-black-red-no-rims.glb",
   },
+  {
+    coverSetId: "mx_king_matte_blue",
+    base: "/models/y15zr/variants/mx-king-matte-blue-no-rims.glb",
+  },
+  {
+    coverSetId: "mx_king_silver_blue",
+    base: "/models/y15zr/variants/mx-king-silver-blue-no-rims.glb",
+  },
+  {
+    coverSetId: "mx_king_red",
+    base: "/models/y15zr/variants/mx-king-red-no-rims.glb",
+  },
+  {
+    coverSetId: "mx_king_yellow",
+    base: "/models/y15zr/variants/mx-king-yellow-no-rims.glb",
+  },
+  {
+    coverSetId: "jupiter_mx_white_blue",
+    base: "/models/y15zr/variants/jupiter-mx-white-blue-no-rims.glb",
+  },
+  {
+    coverSetId: "jupiter_mx_white_red",
+    base: "/models/y15zr/variants/jupiter-mx-white-red-no-rims.glb",
+  },
 ] as const;
 
 const lcv8ColorIds = ["matt_black", "gloss_black", "white"] as const;

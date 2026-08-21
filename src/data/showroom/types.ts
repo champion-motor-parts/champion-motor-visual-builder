@@ -22,7 +22,13 @@ export type CoverSetId =
   | "exciter_rc_black_green"
   | "exciter_rc_black_purple"
   | "exciter_rc_white_red"
-  | "exciter_rc_black_red";
+  | "exciter_rc_black_red"
+  | "mx_king_matte_blue"
+  | "mx_king_silver_blue"
+  | "mx_king_red"
+  | "mx_king_yellow"
+  | "jupiter_mx_white_blue"
+  | "jupiter_mx_white_red";
 
 export type RimColorId =
   | "matt_black"
