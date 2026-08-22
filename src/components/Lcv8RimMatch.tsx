@@ -560,6 +560,13 @@ export function Lcv8RimMatch() {
                   </div>
                 )}
               </div>
+
+              {viewMode === "3d" ? (
+                <div className="mt-3 border-t border-black/10 pt-3 text-center text-[11px] font-bold leading-5 text-zinc-600 sm:text-xs">
+                  <p>{t.disclaimer3dPrimary}</p>
+                  <p className="text-zinc-500">{t.disclaimer3dSecondary}</p>
+                </div>
+              ) : null}
             </div>
 
             {viewNotice ? (

@@ -39,6 +39,10 @@ const en = {
   showRims: "Show stock rims",
   hideRims: "Hide stock rims",
   model3d: "Interactive 3D motorcycle model",
+  disclaimer3dPrimary:
+    "The 3D preview is for reference only. The actual product shall prevail. Champion Motor reserves the right of final interpretation.",
+  disclaimer3dSecondary:
+    "Paparan 3D adalah untuk rujukan sahaja. Produk sebenar adalah muktamad. Champion Motor mempunyai hak mutlak untuk membuat tafsiran akhir.",
 };
 
 const ms: Record<keyof typeof en, string> = {
@@ -80,6 +84,10 @@ const ms: Record<keyof typeof en, string> = {
   showRims: "Tunjukkan rim stok",
   hideRims: "Sembunyikan rim stok",
   model3d: "Model motosikal 3D interaktif",
+  disclaimer3dPrimary:
+    "Paparan 3D adalah untuk rujukan sahaja. Produk sebenar adalah muktamad. Champion Motor mempunyai hak mutlak untuk membuat tafsiran akhir.",
+  disclaimer3dSecondary:
+    "The 3D preview is for reference only. The actual product shall prevail. Champion Motor reserves the right of final interpretation.",
 };
 
 export const translations = { en, ms };
