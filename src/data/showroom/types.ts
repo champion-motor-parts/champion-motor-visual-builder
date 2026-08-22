@@ -2,6 +2,7 @@ export type MotorModelId = "y16zr" | "y15zr";
 
 export type RimModelId =
   | "sp522"
+  | "sp399"
   | "lcv8_5spoke"
   | "six_spoke_sport"
   | "y_spoke_racing"

@@ -277,6 +277,12 @@ export function Lcv8RimMatch() {
             `Set cover: ${selectedCoverSet.label}`,
             `Jenis rim: ${selectedRimModel.label}`,
             `Warna rim: ${selectedRimColor.label}`,
+            ...(selectedRimModel.frontSize && selectedRimModel.rearSize
+              ? [
+                  `Saiz rim depan: ${selectedRimModel.frontSize}`,
+                  `Saiz rim belakang: ${selectedRimModel.rearSize}`,
+                ]
+              : []),
             "",
             "Boleh sahkan harga, stok dan slot pemasangan?",
           ]
@@ -287,6 +293,12 @@ export function Lcv8RimMatch() {
             `Cover set: ${selectedCoverSet.label}`,
             `Rim type: ${selectedRimModel.label}`,
             `Rim colour: ${selectedRimColor.label}`,
+            ...(selectedRimModel.frontSize && selectedRimModel.rearSize
+              ? [
+                  `Front rim size: ${selectedRimModel.frontSize}`,
+                  `Rear rim size: ${selectedRimModel.rearSize}`,
+                ]
+              : []),
             "",
             "Can you confirm the price, stock and installation slot?",
           ];
@@ -297,7 +309,9 @@ export function Lcv8RimMatch() {
     selectedCoverSet.label,
     selectedMotorModel.label,
     selectedRimColor.label,
+    selectedRimModel.frontSize,
     selectedRimModel.label,
+    selectedRimModel.rearSize,
   ]);
 
   const whatsappUrl = `https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${encodeURIComponent(
@@ -331,6 +345,14 @@ export function Lcv8RimMatch() {
   function changeRimModel(nextRimModelId: RimModelId) {
     setRimModelId(nextRimModelId);
     setViewNotice("");
+
+    if (nextRimModelId === "sp399") {
+      if (rimColorId !== "white" && rimColorId !== "gloss_black") {
+        setRimColorId("white");
+      }
+      setViewMode("3d");
+      return;
+    }
 
     if (nextRimModelId === "sp522") {
       if (
@@ -485,7 +507,16 @@ export function Lcv8RimMatch() {
               </div>
 
               <div className="mt-3 flex flex-wrap gap-2">
-                {[selectedMotorModel.label, selectedRimModel.label, t.finishedImage].map((badge) => (
+                {[
+                  selectedMotorModel.label,
+                  selectedRimModel.label,
+                  ...(selectedRimModel.frontSize && selectedRimModel.rearSize
+                    ? [
+                        `${t.frontRimSize} ${selectedRimModel.frontSize}`,
+                        `${t.rearRimSize} ${selectedRimModel.rearSize}`,
+                      ]
+                    : []),
+                ].map((badge) => (
                   <span
                     key={badge}
                     className="rounded-lg border border-white/10 bg-white/10 px-2.5 py-1 text-xs font-bold text-stone-200"
@@ -678,6 +709,12 @@ export function Lcv8RimMatch() {
                   [t.coverSet, selectedCoverSet.label],
                   [t.rimType, selectedRimModel.label],
                   [t.rimColor, selectedRimColor.label],
+                  ...(selectedRimModel.frontSize && selectedRimModel.rearSize
+                    ? [
+                        [t.frontRimSize, selectedRimModel.frontSize],
+                        [t.rearRimSize, selectedRimModel.rearSize],
+                      ]
+                    : []),
                 ].map(([label, value]) => (
                   <div
                     key={label}

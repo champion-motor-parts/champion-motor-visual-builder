@@ -80,6 +80,8 @@ const lcv8ColorIds = ["matt_black", "gloss_black", "white"] as const;
 
 const sp522ColorIds = ["matt_black", "gloss_black", "gold"] as const;
 
+const sp399ColorIds = ["white", "gloss_black"] as const;
+
 export const threeDVariants: readonly ThreeDVariant[] = [
   {
     modelId: "y15zr",
@@ -114,6 +116,20 @@ export const threeDVariants: readonly ThreeDVariant[] = [
           coverSet: path,
           frontRim: "/models/y15zr/modular/rims/sp522/sp522-front.glb",
           rearRim: "/models/y15zr/modular/rims/sp522/sp522-rear.glb",
+        },
+      }),
+    ),
+    ...sp399ColorIds.map(
+      (rimColorId): ThreeDVariant => ({
+        modelId: "y15zr",
+        coverSetId,
+        rimModelId: "sp399",
+        rimColorId,
+        modular: {
+          base: base ?? "/models/y15zr/modular/y15zr-core.glb",
+          coverSet: path,
+          frontRim: "/models/y15zr/modular/rims/sp399/sp399-front.glb",
+          rearRim: "/models/y15zr/modular/rims/sp399/sp399-rear.glb",
         },
       }),
     ),

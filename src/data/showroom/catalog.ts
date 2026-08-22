@@ -17,6 +17,8 @@ type RimModel = {
   shortLabel: string;
   motorModelIds: readonly MotorModelId[];
   rimColorIds?: readonly RimColorId[];
+  frontSize?: string;
+  rearSize?: string;
 };
 
 type CoverSet = {
@@ -49,6 +51,15 @@ const allRimModels: readonly RimModel[] = [
     shortLabel: "SP522",
     motorModelIds: ["y15zr"],
     rimColorIds: ["matt_black", "gloss_black", "gold"],
+  },
+  {
+    id: "sp399",
+    label: "SP 399",
+    shortLabel: "SP 399",
+    motorModelIds: ["y15zr"],
+    rimColorIds: ["white", "gloss_black"],
+    frontSize: "1.60 x 17",
+    rearSize: "1.60 x 17",
   },
   {
     id: "lcv8_5spoke",
@@ -85,7 +96,9 @@ const allRimModels: readonly RimModel[] = [
 
 export const rimModels = allRimModels.filter(
   (rimModel) =>
-    (rimModel.id === "sp522" || rimModel.id === "lcv8_5spoke") &&
+    (rimModel.id === "sp522" ||
+      rimModel.id === "sp399" ||
+      rimModel.id === "lcv8_5spoke") &&
     rimModel.motorModelIds.includes("y15zr"),
 );
 
